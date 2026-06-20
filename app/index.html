@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lexi 健康养成搞钱闯关游戏</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;800;900&family=Martian+Mono:wght@500;600;700;800&family=Noto+Sans+SC:wght@500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0a0b0e;
+      --panel:rgba(255,255,255,.035); --panel2:rgba(255,255,255,.06);
+      --line:rgba(255,255,255,.09); --line2:rgba(255,255,255,.16);
+      --ink:#f4f0e6; --muted:#8e919c; --faint:#666974;
+      --gold:#ffd24a; --gold2:#ffab17;
+      --lime:#bdf24a; --lime2:#8fd61f;
+      --fire:#ff7e42; --fire2:#ff3f24;
+      --cyan:#3bd8ee; --cyan2:#15b2d6;
+      --cjk:"Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+      --mono:"Martian Mono",ui-monospace,"SF Mono",Menlo,monospace;
+      --lat:"Archivo",var(--cjk);
+      color:var(--ink); font-family:var(--cjk);
+    }
+    *{box-sizing:border-box;}
+    html,body{margin:0;min-height:100%;}
+    body{
+      min-height:100vh; position:relative; overflow-x:hidden;
+      -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      background:
+        radial-gradient(880px 520px at 8% -12%, rgba(255,170,30,.20), transparent 58%),
+        radial-gradient(760px 460px at 104% -4%, rgba(55,214,238,.11), transparent 54%),
+        radial-gradient(820px 760px at 50% 128%, rgba(189,242,74,.07), transparent 60%),
+        var(--bg);
+    }
+    body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.045;mix-blend-mode:overlay;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+    body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+      background-image:linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);
+      background-size:36px 36px;-webkit-mask:radial-gradient(circle at 50% 16%,#000,transparent 72%);mask:radial-gradient(circle at 50% 16%,#000,transparent 72%);}
+    button{font:inherit;cursor:pointer;}
+
+    @keyframes rise{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;}}
+    @keyframes glow{0%,100%{text-shadow:0 0 18px rgba(255,200,60,.45);}50%{text-shadow:0 0 34px rgba(255,200,60,.85);}}
+    @keyframes spin{0%,100%{transform:rotateY(0);}50%{transform:rotateY(180deg);}}
+    @keyframes slide{to{background-position:200% 0;}}
+
+    .wrap{position:relative;z-index:1;width:min(540px,calc(100vw - 22px));margin:0 auto;padding:24px 0 54px;}
+
+    /* header + wallet */
+    .brand{display:flex;align-items:center;gap:14px;animation:rise .5s ease both;}
+    .mark{flex:0 0 auto;width:56px;height:56px;border-radius:17px;display:grid;place-items:center;position:relative;
+      background:linear-gradient(155deg,#1d2128,#0d1014);border:1px solid rgba(255,255,255,.1);
+      box-shadow:0 12px 28px rgba(0,0,0,.5),0 0 24px rgba(255,190,40,.16),inset 0 1px 1px rgba(255,255,255,.08);}
+    .mark svg{width:36px;height:36px;display:block;}
+    .brand h1{margin:0;font-weight:900;font-size:clamp(20px,5.4vw,24px);letter-spacing:-.3px;line-height:1.15;
+      background:linear-gradient(180deg,#fff,#ffe39a);-webkit-background-clip:text;background-clip:text;color:transparent;}
+    .brand .sub{margin-top:3px;font-size:12px;font-weight:700;color:var(--muted);font-family:var(--lat);letter-spacing:.2px;}
+    .estrip{height:3px;border-radius:3px;margin:15px 0 0;background:linear-gradient(90deg,var(--lime),var(--gold),var(--fire),var(--cyan),var(--lime));background-size:200% 100%;animation:slide 7s linear infinite;opacity:.85;}
+
+    .wallet{display:flex;gap:11px;margin:15px 0 18px;animation:rise .55s ease both .05s;}
+    .wcard{flex:1;min-width:0;border-radius:16px;padding:13px 15px;border:1px solid var(--line);background:var(--panel);}
+    .wcard.coin{background:linear-gradient(160deg,rgba(255,210,74,.15),rgba(255,170,23,.04));border-color:rgba(255,210,74,.3);}
+    .wcard.cash{background:linear-gradient(160deg,rgba(255,126,66,.12),rgba(255,63,36,.03));border-color:rgba(255,126,66,.26);}
+    .wcard .wl{font-size:10.5px;font-weight:800;color:var(--muted);font-family:var(--lat);letter-spacing:.4px;}
+    .wcard .wv{display:block;margin-top:5px;font-family:var(--mono);font-weight:800;font-size:23px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .wcard.coin .wv{color:var(--gold);} .wcard.cash .wv{color:var(--fire);}
+    .wcard .wd{font-style:normal;margin-left:5px;font-size:10px;color:var(--faint);font-weight:700;}
+
+    /* panels */
+    .panel{border-radius:20px;border:1px solid var(--line);background:linear-gradient(180deg,var(--panel),rgba(255,255,255,.012));
+      padding:20px 18px;margin-bottom:16px;box-shadow:0 22px 54px rgba(0,0,0,.42);animation:rise .6s ease both;}
+    .panel.s1{animation-delay:.1s;} .panel.s2{animation-delay:.16s;} .panel.s3{animation-delay:.22s;}
+    .ph{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:900;margin:0 0 15px;}
+    .ph .dot{width:9px;height:9px;border-radius:50%;background:var(--lime);box-shadow:0 0 10px var(--lime);}
+    .ph .tip{margin-left:auto;font-size:10.5px;font-weight:700;color:var(--muted);font-family:var(--mono);letter-spacing:-.3px;}
+
+    .banner{display:flex;gap:8px;align-items:center;padding:10px 13px;border-radius:12px;font-size:12px;font-weight:700;line-height:1.5;
+      background:rgba(255,210,74,.07);border:1px dashed rgba(255,210,74,.3);color:var(--gold);margin-bottom:14px;}
+    .banner b{color:#fff;}
+    .fresh-hint{font-size:11px;color:#8c8c8c;font-weight:600;margin:-8px 2px 14px;letter-spacing:.02em}
+    .fresh-hint.stale{color:#bda35f}   /* 淡琥珀:轻提示,非红色告警 */
+    .fresh-hint.ok{color:#6f9a6f}
+
+    .day-chips{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;-webkit-overflow-scrolling:touch;}
+    .day-chips::-webkit-scrollbar{height:0;}
+    .day-chips .chip{flex:0 0 auto;padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:var(--panel);
+      color:var(--muted);font-size:12px;font-weight:800;font-family:var(--lat);white-space:nowrap;cursor:pointer;user-select:none;transition:.18s;}
+    .day-chips .chip:hover{transform:translateY(-2px);border-color:var(--line2);color:var(--ink);}
+    .day-chips .chip.on{background:linear-gradient(135deg,var(--gold),var(--gold2));border-color:var(--gold);color:#1a1205;box-shadow:0 7px 18px rgba(255,180,30,.36);}
+    .day-chips .chip.pre{opacity:.42;}
+    .day-chips .empty{font-size:12px;color:var(--muted);font-weight:700;padding:6px 2px;}
+
+    .tiles{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+    .tile{position:relative;border-radius:16px;border:1px solid var(--line);background:var(--panel);padding:15px 15px 14px;overflow:hidden;}
+    .tile::before{content:"";position:absolute;left:0;top:0;height:100%;width:3px;background:var(--accent);box-shadow:0 0 14px var(--accent);}
+    .tile .glowdot{position:absolute;right:-28px;top:-28px;width:88px;height:88px;border-radius:50%;background:radial-gradient(circle,var(--accent),transparent 70%);opacity:.15;}
+    .tile.step{--accent:var(--lime);} .tile.cal{--accent:var(--fire);}
+    .tile .l{position:relative;font-size:12px;font-weight:800;color:var(--muted);}
+    .tile .v{position:relative;margin-top:8px;font-family:var(--mono);font-weight:800;font-size:clamp(22px,7vw,28px);line-height:1;}
+    .tile.step .v{color:var(--lime);} .tile.cal .v{color:var(--fire);}
+    .tile small{position:relative;display:block;margin-top:6px;font-size:10.5px;color:var(--faint);font-weight:700;line-height:1.5;}
+
+    .hero{position:relative;margin-top:11px;border-radius:18px;padding:21px 18px;text-align:center;overflow:hidden;
+      background:radial-gradient(125% 150% at 50% -10%,rgba(255,210,74,.24),rgba(255,170,23,.04) 58%,transparent),rgba(255,255,255,.02);
+      border:1px solid rgba(255,210,74,.34);}
+    .hero .l{font-size:12.5px;font-weight:850;color:var(--gold);font-family:var(--lat);letter-spacing:.5px;text-transform:uppercase;}
+    .hero .coinwrap{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:6px;}
+    .hero .icon{font-size:30px;display:inline-block;animation:spin 3.8s ease-in-out infinite;filter:drop-shadow(0 4px 10px rgba(255,180,30,.5));}
+    .hero .v{font-family:var(--mono);font-weight:800;font-size:clamp(40px,13.5vw,58px);line-height:.92;color:var(--gold);animation:glow 3.2s ease-in-out infinite;}
+    .hero small{display:block;margin-top:10px;font-size:11px;color:var(--muted);font-weight:700;}
+
+    .cal-break{display:flex;gap:10px;margin-top:11px;}
+    .cal-break .seg{flex:1;text-align:center;border-radius:13px;padding:11px 8px;background:var(--panel);border:1px solid var(--line);font-size:11.5px;font-weight:800;color:var(--muted);}
+    .cal-break b{display:block;margin-top:4px;font-family:var(--mono);font-weight:800;font-size:15px;color:var(--fire);}
+    .cal-break i{display:block;font-style:normal;margin-top:3px;font-size:9.5px;color:var(--faint);font-weight:700;}
+    .workouts{margin-top:11px;border-radius:13px;border:1px solid var(--line);background:var(--panel);padding:12px 14px;}
+    .wo-head{display:flex;align-items:baseline;gap:6px;font-size:12.5px;font-weight:850;color:var(--muted);}
+    .wo-head .ic{font-size:13px;}
+    .wo-head b{font-family:var(--mono);color:var(--lime);font-weight:800;font-size:16px;}
+    .wo-head i{font-style:normal;color:var(--faint);font-weight:700;margin-left:auto;}
+    .wo-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 0 6px;border-top:1px solid var(--line);margin-top:7px;font-size:12.5px;}
+    .wo-row .wo-t{font-weight:850;color:var(--ink);white-space:nowrap;}
+    .wo-row .wo-m{font-family:var(--mono);font-size:11px;color:var(--muted);font-weight:600;text-align:right;}
+    .wo-empty{font-size:11.5px;color:var(--faint);font-weight:700;}
+    /* Token 疯狂燃烧 */
+    .tok-hero{text-align:center;border-radius:16px;padding:16px;overflow:hidden;
+      background:radial-gradient(125% 150% at 50% -10%,rgba(255,90,40,.22),rgba(255,63,36,.04) 60%,transparent),rgba(255,255,255,.02);
+      border:1px solid rgba(255,90,40,.32);}
+    .tok-hero .l{font-size:12px;font-weight:850;color:var(--fire);font-family:var(--lat);letter-spacing:.4px;}
+    .tok-hero .v{margin-top:5px;font-family:var(--mono);font-weight:800;font-size:clamp(25px,8.5vw,38px);line-height:1;color:var(--fire);text-shadow:0 0 24px rgba(255,90,40,.55);animation:glow 3.2s ease-in-out infinite;}
+    .tok-hero small{display:block;margin-top:8px;font-size:10.5px;color:var(--muted);font-weight:700;}
+    .tok-sub{display:flex;gap:10px;margin-top:11px;}
+    .tok-sub .seg{flex:1;text-align:center;border-radius:13px;padding:11px 8px;background:var(--panel);border:1px solid var(--line);font-size:11.5px;font-weight:800;color:var(--muted);}
+    .tok-sub b{display:block;margin-top:4px;font-family:var(--mono);font-weight:800;font-size:15px;color:var(--ink);}
+    .tok-sub i{display:block;font-style:normal;margin-top:3px;font-size:9px;color:var(--faint);font-weight:700;}
+
+    .minsum{display:flex;justify-content:space-between;align-items:center;margin-top:13px;padding:11px 15px;border-radius:12px;
+      background:var(--panel);border:1px solid var(--line);font-size:12px;font-weight:800;color:var(--muted);}
+    .minsum b{font-family:var(--mono);font-weight:800;font-size:14px;}
+    .minsum .s{color:var(--lime);}
+
+    .real-foot{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:13px;font-size:11.5px;color:var(--muted);font-weight:700;line-height:1.5;}
+    .rbtn{padding:8px 16px;border-radius:10px;border:1px solid var(--line2);background:var(--panel2);color:var(--ink);font-weight:800;font-size:12.5px;font-family:var(--lat);transition:.18s;}
+    .rbtn:hover{border-color:var(--gold);color:var(--gold);}
+
+    /* NPC water */
+    .npc-task{border-radius:15px;border:1px solid var(--line);background:var(--panel);padding:15px;}
+    .nt-head{display:flex;justify-content:space-between;align-items:center;}
+    .nt-title{font-size:15px;font-weight:900;}
+    .nt-reward{font-size:11px;font-weight:850;color:var(--gold);background:rgba(255,210,74,.12);border:1px solid rgba(255,210,74,.26);padding:3px 10px;border-radius:9px;}
+    .nt-bar{margin-top:12px;height:14px;border-radius:9px;background:rgba(255,255,255,.06);border:1px solid var(--line);overflow:hidden;}
+    .nt-fill{height:100%;width:0;border-radius:9px;background:linear-gradient(90deg,var(--cyan2),var(--cyan));box-shadow:0 0 16px rgba(55,214,238,.55);transition:width .7s cubic-bezier(.2,.8,.2,1);}
+    .nt-foot{margin-top:9px;display:flex;justify-content:space-between;font-size:12.5px;font-weight:850;color:var(--muted);}
+    .nt-foot .ok{color:var(--lime);}
+    .nt-src{margin-top:9px;font-size:10.5px;color:var(--faint);font-weight:700;}
+    .m-thumbs{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;min-height:8px;}
+    .m-thumb{position:relative;width:46px;height:46px;border-radius:9px;background-size:cover;background-position:center;border:1px solid var(--line2);}
+    .m-kcal{position:absolute;left:0;right:0;bottom:0;font-size:8px;font-weight:800;text-align:center;color:#fff;background:rgba(0,0,0,.55);border-radius:0 0 8px 8px;padding:1px 0;}
+    .m-est{font-size:11.5px;font-weight:700;color:var(--fire);margin-top:9px;}
+    .m-msg{font-size:11px;font-weight:700;margin-top:7px;min-height:8px;}
+    .m-empty{font-size:11px;color:var(--faint);font-weight:700;}
+    .m-up{margin-top:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+    .m-up .mc{font-size:12.5px;font-weight:850;color:var(--gold);}
+    .m-up button{padding:8px 15px;border-radius:10px;border:1px solid rgba(255,138,61,.4);background:rgba(255,138,61,.12);color:var(--fire);font-weight:850;font-size:12.5px;font-family:var(--lat);}
+    .m-up button:disabled{opacity:.5;}
+    .w-up{margin-top:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+    .w-up button{padding:8px 15px;border-radius:10px;border:1px solid rgba(59,216,238,.42);background:rgba(59,216,238,.12);color:var(--cyan);font-weight:850;font-size:12.5px;font-family:var(--lat);}
+    .w-up button:disabled{opacity:.5;}
+    .w-msg{font-size:11.5px;font-weight:800;color:var(--faint);flex:1;}
+    .w-msg.ok{color:var(--cyan);} .w-msg.bad{color:var(--fire);}
+    .bc-ab{font-size:12.5px;font-weight:800;color:var(--lime);margin:5px 0 12px;min-height:8px;}
+
+    /* rules */
+    .rules{font-size:12.5px;font-weight:600;line-height:1.7;color:var(--ink);}
+    .rules .r{display:flex;gap:11px;padding:9px 0;border-bottom:1px solid var(--line);}
+    .rules .r:last-child{border:none;}
+    .rules .k{flex:0 0 auto;min-width:30px;font-family:var(--lat);font-weight:800;color:var(--gold);}
+    .rules code{font-family:var(--mono);background:rgba(255,210,74,.1);color:var(--gold);padding:1px 6px;border-radius:5px;font-weight:700;font-size:11px;}
+    .rules b{color:#fff;}
+
+    footer{margin-top:26px;text-align:center;font-size:11px;color:var(--faint);font-weight:600;line-height:1.7;}
+    .toast{position:fixed;left:50%;bottom:40px;transform:translateX(-50%);background:#15171b;color:#fff;font-weight:800;font-size:14px;padding:12px 22px;border-radius:999px;border:1px solid var(--line2);box-shadow:0 16px 40px rgba(0,0,0,.5);opacity:0;transition:opacity .3s;z-index:60;}
+    .toast.show{opacity:1;}
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="brand">
+    <div class="mark">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="WELL2GO">
+        <defs>
+          <linearGradient id="ringG" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#c4f24a"/><stop offset="1" stop-color="#3bd8ee"/>
+          </linearGradient>
+          <linearGradient id="boltG" x1="16" y1="7" x2="32" y2="41" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#ffe680"/><stop offset="1" stop-color="#ffab17"/>
+          </linearGradient>
+          <filter id="gl" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="1.3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <circle cx="24" cy="24" r="17" stroke="url(#ringG)" stroke-width="3.3" stroke-linecap="round"
+                stroke-dasharray="80 28" transform="rotate(125 24 24)" filter="url(#gl)"/>
+        <path d="M27 7 L14 27 L22 27 L20 41 L34 20 L26 20 Z" fill="url(#boltG)" filter="url(#gl)"/>
+      </svg>
+    </div>
+    <div style="flex:1;min-width:0">
+      <h1>Lexi 健康养成搞钱闯关游戏</h1>
+      <div class="sub">WALK · BURN → COINS → 闯关搞钱 💰</div>
+    </div>
+  </header>
+  <div class="estrip"></div>
+
+  <div class="wallet">
+    <div class="wcard coin"><div class="wl">🪙 累计游戏币</div><span class="wv" id="rCoinTotal">—</span><i class="wd" id="rDaysCnt">/ —</i></div>
+    <div class="wcard cash"><div class="wl">💴 可提现</div><span class="wv" id="rCash">—</span></div>
+  </div>
+
+  <!-- 真实数据 -->
+  <section class="panel s1">
+    <h3 class="ph"><span class="dot"></span>真实战绩 <span class="tip" id="realDay">读取中…</span></h3>
+    <div class="banner">🎮 游戏 <b>2026-06-04</b> 起正式开始 · 数据来自 Apple 健康 / Strava 自动同步</div>
+    <div id="freshHint" class="fresh-hint"></div>
+    <div class="day-chips" id="dayChips"></div>
+    <div class="tiles">
+      <div class="tile step"><span class="glowdot"></span><div class="l" id="rStepLbl">🚶 今日步数</div><div class="v" id="rSteps">—</div><small id="rStepsSub">上午 — · 下午 —</small></div>
+      <div class="tile cal"><span class="glowdot"></span><div class="l" id="rCalLbl">🔥 今日活动消耗</div><div class="v" id="rCal">—</div><small id="rCalSub">上午 — · 下午 —</small><small style="opacity:.72">走路/运动多烧的，不含基础代谢</small></div>
+    </div>
+    <div class="workouts" id="rWorkouts"></div>
+    <div class="hero">
+      <div class="l" id="rCoinLbl">✨ 今日赚的币</div>
+      <div class="coinwrap"><span class="icon">🪙</span><span class="v" id="rCoinToday">—</span></div>
+      <small id="rCoinTodayDay">按今日步数 + 活动消耗实算</small>
+    </div>
+    <div class="cal-break">
+      <div class="seg">😴 基础代谢<b id="rBasal">—</b><i>躺着也烧 · 不赚币</i></div>
+      <div class="seg">📊 今日总消耗<b id="rTotal">—</b><i>基础 + 活动</i></div>
+    </div>
+    <div class="minsum"><span>📊 总步数 <b class="s" id="rStepSum">—</b></span><span style="color:var(--faint)">游戏 2026-06-04 起算</span></div>
+    <div class="real-foot"><button class="rbtn" id="rRefresh">🔄 刷新</button><button class="rbtn" id="tCalBtn">📷 导入 Technogym 消耗</button><span id="tCalMsg" style="font-size:11px;font-weight:800;margin-left:6px"></span><span id="rNote"></span></div>
+    <input type="file" id="tCalFile" accept="image/*" capture="environment" style="display:none">
+    <div class="nt-src">💡 步数 / 活动卡路里会自动同步（Apple 健康 + Strava 每天自动拉）。万一哪天没数据，点上面「📷 导入 Technogym 消耗」截图手动补上即可。</div>
+  </section>
+
+  <!-- NPC 任务 -->
+  <section class="panel s2">
+    <h3 class="ph"><span class="dot" style="background:var(--cyan);box-shadow:0 0 10px var(--cyan)"></span>NPC 任务官 <span class="tip">DAILY QUEST</span></h3>
+    <div class="npc-task">
+      <div class="nt-head"><span class="nt-title">🍱 疯狂节食餐</span><span class="nt-reward">每份 +1000 币</span></div>
+      <div class="nt-bar"><div class="nt-fill" id="mFill" style="background:linear-gradient(90deg,#ff8a3d,#ff4d2e);box-shadow:0 0 16px rgba(255,90,40,.5)"></div></div>
+      <div class="nt-foot"><span id="mText">本周 0 / 8 份</span><span id="mStatus">—</span></div>
+      <div class="m-thumbs" id="mThumbs"></div>
+      <div class="m-est" id="mEst"></div>
+      <div class="m-up"><span class="mc" id="mCoins">已领 0 币</span><button id="mUpBtn">📸 上传节食餐</button></div>
+      <div class="m-msg" id="mMsg"></div>
+      <input type="file" id="mFile" accept="image/*" style="display:none">
+      <div class="nt-src">每周上传 8 份节食餐照片，每份 1000 币（满 8 封顶）· AI 看图估热量和健康度</div>
+    </div>
+    <div class="npc-task" style="margin-top:12px">
+      <div class="nt-head"><span class="nt-title">💧 今日喝够水</span><span class="nt-reward">达标 +500 币</span></div>
+      <div class="nt-bar"><div class="nt-fill" id="wFill"></div></div>
+      <div class="nt-foot"><span id="wText">— / 1500 ml</span><span id="wStatus">—</span></div>
+      <div class="w-up"><span class="w-msg" id="wMsg"></span><button id="wUpBtn">📸 拍照打卡喝水</button></div>
+      <input type="file" id="wFile" accept="image/*" capture="environment" style="display:none">
+      <div class="nt-src">📷 拍带水位的水杯/水瓶打卡，AI 识别真喝水才 +500ml（3 次满 1500 → +500币）· 智能杯后续自动同步</div>
+    </div>
+  </section>
+
+  <!-- Flow 创作点数 -->
+  <section class="panel s2">
+    <h3 class="ph"><span class="dot" style="background:var(--fire);box-shadow:0 0 10px var(--fire)"></span>Flow 创作点数 <span class="tip">🎬 Google AI · 视频</span></h3>
+    <div class="tok-hero">
+      <div class="l">🎬 剩余 Flow 点数</div>
+      <div class="v" id="flowBal">—</div>
+      <small id="flowReset">每月 25 日重置 · 来自 Flow 活动记录</small>
+    </div>
+    <div class="tok-sub">
+      <div class="seg">🔥 <span id="flowDay">今日</span>消耗<b id="flowUsed">—</b><i>较前一日余额下降（首日明起算）</i></div>
+      <div class="seg">🤖 AI 点数<b id="flowAi">—</b><i>Flow 点数用尽后启用</i></div>
+    </div>
+  </section>
+
+  <!-- 体测挑战 -->
+  <section class="panel s2">
+    <h3 class="ph"><span class="dot" style="background:var(--fire);box-shadow:0 0 10px var(--fire)"></span>体测挑战 <span class="tip">🏋️ 身体成分</span></h3>
+    <div class="tok-hero">
+      <div class="l">📊 综合评分 <span id="bcDate"></span></div>
+      <div class="v" id="bcScore">待上传</div>
+      <small id="bcStats">传 Technogym 体测报告，AI 自动抽：体脂 / 肌肉 / 相位角 / BMR</small>
+    </div>
+    <div class="bc-ab" id="bcAB"></div>
+    <div class="w-up"><span class="w-msg" id="bcMsg"></span><button id="bcBtn" style="border-color:rgba(255,138,61,.42);background:rgba(255,138,61,.12);color:var(--fire)">📷 上传体测卡</button></div>
+    <input type="file" id="bcFile" accept="image/*" capture="environment" style="display:none">
+    <div class="nt-src">📷 传体测报告 → 抽评分/体脂/肌肉/相位角/BMR；隔约 2 周再传一张，自动 A/B 出成绩单</div>
+  </section>
+
+  <section class="panel s3">
+    <h3 class="ph"><span class="dot" style="background:var(--gold);box-shadow:0 0 10px var(--gold)"></span>初始版规则</h3>
+    <div class="rules">
+      <div class="r"><span class="k">赚币</span><span>1 步 = <code>15 币</code>，1 大卡 = <code>15 币</code></span></div>
+      <div class="r"><span class="k">基础</span><span>每天前 <code>4000 步</code>为基础步数，<b>不计入赚币</b>，超出部分才给币</span></div>
+      <div class="r"><span class="k">上午</span><span>00:00–12:00 走路 + 燃脂币数 <code>×2</code>（可升级到 ×3 / ×4）</span></div>
+      <div class="r"><span class="k">下午</span><span>12:00 之后按基础原价，无加成</span></div>
+      <div class="r"><span class="k">卡路里</span><span>活动消耗并行读取 <b>Strava / Technogym / Apple 健康</b>，按上午/下午各取最大值，避免漏算也避免重复相加</span></div>
+      <div class="r"><span class="k">任务</span><span>NPC 每日任务：喝够 <code>1500ml</code> → <code>+500 币</code></span></div>
+      <div class="r"><span class="k">提现</span><span><code>100 币 = 1 元</code>，游戏币上限 <code>50 万</code>（= 可提现 ¥5,000）</span></div>
+      <div class="r"><span class="k">起算</span><span>游戏 <code>2026-06-04</code> 起正式开始，之前的数据不计入</span></div>
+    </div>
+  </section>
+
+  <footer>Lexi 健康养成搞钱闯关游戏 · 初始版规则 Demo<br>步数 / 卡路里折币 · 上午倍率 · 提现均按规则文档实现</footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="./config.js"></script>
+<script>
+  const RATE=15;            // 1 步 / 1 大卡 = 15 币
+  const CASH=100;           // 100 币 = 1 元
+  const CAP=500000;         // demo 游戏币封顶（50 万币 = 可提现 ¥5000）
+  const MULT=2;             // 上午倍率（固定 ×2）
+  const BASE=4000;          // 基础步数：每天前 4000 步不计入赚币
+  const WATER_GOAL=1500;    // NPC 饮水任务目标 ml
+  const WATER_REWARD=500;   // 饮水达标奖励币
+  // —— 配置全部来自 config.js（window.WELL2GO_CONFIG）。复制 config.example.js → config.js 改成你自己的。
+  const CFG = window.WELL2GO_CONFIG || {};
+  const GAME_START = CFG.gameStart || '2026-06-04';   // 游戏起算日：此日之前的数据不计入
+  // 单人模式：本卡只统计这一个 athlete（读自己的 Supabase，受 RLS 保护）
+  const SB = { url: CFG.url || '', anon: CFG.anon || '', athlete: (CFG.athlete || 'me') };
+  const $=id=>document.getElementById(id);
+  function todayLocal(){const d=new Date(),z=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate());}
+
+  // ===== 真实数据：读 Supabase（步数/卡路里）→ 按规则算币；支持按天回看 =====
+  const m=MULT;
+  // 有效活动消耗：三源并行采集，按时段取最大值去重。返回 [上午,下午,来源]
+  function effCal(row){
+    // 并行采集+去重(2026-06-11):三源量的是同一段活动(高度重叠,手表全天⊇跑步机那段),
+    // 不再"优先级挑一个扔其余",改按时段取最大=去重后的最完整值——既不丢数据(谁测得全用谁)
+    // 也不双算(重叠不相加)。走路那份另走步数赚币,这里只认运动卡路里。
+    const S=[
+      ['strava',    +row.strava_cal_am||0, +row.strava_cal_pm||0],  // Strava 自动同步(Technogym→Strava)
+      ['technogym', +row.import_cal_am||0,  +row.import_cal_pm||0],  // Technogym 截图导入
+      ['health',    +row.calories_am||0,    +row.calories_pm||0],    // Apple Watch
+    ];
+    const ca=Math.max(...S.map(s=>s[1])), cp=Math.max(...S.map(s=>s[2]));
+    let best=S[0]; for(const s of S) if(s[1]+s[2]>best[1]+best[2]) best=s;  // 标签=贡献最大的源
+    return [ca, cp, ca+cp>0 ? best[0] : 'health'];
+  }
+  // 运动类型 → [图标, 中文]
+  const SPORT={Walk:['🚶','走路'],Run:['🏃','跑步'],TrailRun:['🏃','越野跑'],Hike:['🥾','徒步'],
+    WeightTraining:['🏋️','力量'],Workout:['💪','训练'],Ride:['🚴','骑行'],Swim:['🏊','游泳'],
+    Yoga:['🧘','瑜伽'],Elliptical:['🌀','椭圆机'],StairStepper:['🪜','爬楼']};
+  let WORKOUTS={};   // day → [运动场次]
+  // 基础步数从上午先扣 → 超出部分赚币；卡路里用有效值；饮水达标 +500
+  function coinsOf(row){
+    const sa=+row.steps_am||0,sp=+row.steps_pm||0,wt=+row.water_ml||0;
+    const [ca,cp]=effCal(row);
+    const amE=Math.max(0,sa-BASE), baseLeft=Math.max(0,BASE-sa), pmE=Math.max(0,sp-baseLeft);
+    const stepCoin=amE*RATE*m+pmE*RATE, calCoin=ca*RATE*m+cp*RATE;
+    const waterCoin=wt>=WATER_GOAL?WATER_REWARD:0;
+    return Math.round(stepCoin+calCoin+waterCoin);
+  }
+  const mmdd=d=>d.slice(5).replace('-','/');
+  // token 数太长不好念：≥1亿用「亿」，≥1万用「W」，否则原样
+  const fmtTok=n=>n>=1e8?(n/1e8).toFixed(2)+'亿':n>=1e4?(n/1e4).toFixed(1)+'W':n.toLocaleString('zh-CN');
+  let DAYS=[], SEL=0;   // DAYS: 所有有数据的天(day desc)；SEL: 选中索引
+  let DAILY_RAW=0, MEAL_RAW=0, GAMEDAYS=0, MEALS=[];
+  const MEAL_GOAL=8, MEAL_REWARD=1000;
+  // 钱包累计 = 每日活动币 + 节食餐币（封顶 50 万）
+  function recomputeWallet(){
+    const capped=Math.min(DAILY_RAW+MEAL_RAW, CAP);
+    $('rCoinTotal').textContent=capped.toLocaleString('zh-CN');
+    $('rDaysCnt').textContent=`/ ${GAMEDAYS}天 · 上限50万`;
+    $('rCash').textContent='¥'+(capped/CASH).toFixed(1);
+  }
+  function weekStart(d){ const x=new Date(d), wd=(x.getDay()+6)%7; x.setDate(x.getDate()-wd);
+    const z=n=>String(n).padStart(2,'0'); return x.getFullYear()+'-'+z(x.getMonth()+1)+'-'+z(x.getDate()); }
+
+  // 🍱 疯狂节食餐：本周已传份数+缩略图；餐币按周封顶 8 份
+  async function fetchMeals(){
+    try{
+      const q=`${SB.url}/rest/v1/well2go_meals?athlete=eq.${SB.athlete}&order=created_at.desc&select=photo_url,week_start,created_at,est_kcal,health_score,dish`;
+      const r=await fetch(q,{headers:{apikey:SB.anon,Authorization:'Bearer '+SB.anon},cache:'no-store'});
+      const all=await r.json(); const rows=Array.isArray(all)?all:[];
+      const wk=weekStart(new Date());
+      MEALS=rows.filter(x=>x.week_start===wk);
+      const byWeek={}; for(const x of rows){ byWeek[x.week_start]=(byWeek[x.week_start]||0)+1; }
+      MEAL_RAW=Object.values(byWeek).reduce((s,n)=>s+Math.min(n,MEAL_GOAL)*MEAL_REWARD,0);
+      renderMeals(); recomputeWallet();
+    }catch(_){}
+  }
+  function renderMeals(){
+    const n=MEALS.length, capped=Math.min(n,MEAL_GOAL);
+    $('mFill').style.width=Math.min(100,Math.round(capped/MEAL_GOAL*100))+'%';
+    $('mText').textContent=`本周 ${n} / ${MEAL_GOAL} 份`;
+    $('mCoins').textContent=`已领 ${(capped*MEAL_REWARD).toLocaleString('zh-CN')} 币`;
+    $('mStatus').innerHTML = n>=MEAL_GOAL ? '<span class="ok">✅ 本周达标</span>' : `再传 ${MEAL_GOAL-n} 份`;
+    $('mThumbs').innerHTML = MEALS.length ? MEALS.slice(0,12).map(x=>{
+      const k = x.est_kcal!=null ? `<span class="m-kcal">${x.est_kcal}卡</span>` : '';
+      return `<div class="m-thumb" style="background-image:url('${x.photo_url}')">${k}</div>`;
+    }).join('') : '<span class="m-empty">还没传节食餐照片</span>';
+    const latest = MEALS.find(x=>x.est_kcal!=null);
+    $('mEst').textContent = latest ? `🍽 最近一份：${latest.dish||''} · 约 ${latest.est_kcal} 卡 · 健康度 ${latest.health_score}/10` : '';
+  }
+  async function uploadMeal(file){
+    if(!file) return;
+    const btn=$('mUpBtn'); btn.disabled=true; btn.textContent='上传中…';
+    try{
+      const today=todayLocal(), wk=weekStart(new Date());
+      const ext=((file.name||'').split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';
+      const path=`${SB.athlete}/${Date.now()}-${Math.floor(Math.random()*1e4)}.${ext}`;
+      const up=await fetch(`${SB.url}/storage/v1/object/well2go-meals/${path}`,{method:'POST',
+        headers:{apikey:SB.anon,Authorization:'Bearer '+SB.anon,'Content-Type':file.type||'image/jpeg'},body:file});
+      if(!up.ok) throw new Error('上传失败 '+up.status);
+      const photo_url=`${SB.url}/storage/v1/object/public/well2go-meals/${path}`;
+      const ins=await fetch(`${SB.url}/rest/v1/well2go_meals`,{method:'POST',
+        headers:{apikey:SB.anon,Authorization:'Bearer '+SB.anon,'Content-Type':'application/json',Prefer:'return=minimal'},
+        body:JSON.stringify({athlete:SB.athlete,day:today,week_start:wk,photo_path:path,photo_url})});
+      if(!ins.ok) throw new Error('记录失败 '+ins.status);
+      await fetchMeals();
+      // 🍽 看图识食物热量(估算)
+      $('mMsg').style.color='var(--ink2)'; $('mMsg').textContent='识别热量中…';
+      try{
+        const mv=await fetch(`${SB.url}/functions/v1/well2go-meal-vision`,{method:'POST',
+          headers:{apikey:SB.anon,Authorization:'Bearer '+SB.anon,'Content-Type':'application/json'},
+          body:JSON.stringify({image_url:photo_url})});
+        const r=await mv.json();
+        if(r.ok){ $('mMsg').style.color='var(--lime)'; $('mMsg').textContent=`🍽 ${r.dish} · 约 ${r.est_kcal} 卡 · 健康度 ${r.health_score}/10`; await fetchMeals(); }
+        else{ $('mMsg').style.color='var(--faint)'; $('mMsg').textContent='（热量没识别出来：'+(r.reason||'')+'）'; }
+      }catch(_){ $('mMsg').textContent=''; }
+    }catch(e){ alert('上传出错：'+e.message); }
+    btn.disabled=false; btn.textContent='📸 上传节食餐';
+  }
+
+  // 💧 喝水拍照打卡：上传→edge function 调 Qwen3-VL 判定→通过则服务端 water_ml+=500
+  async function uploadWater(file){
+    if(!file) return;
+    const btn=$('wUpBtn'), msg=$('wMsg'); btn.disabled=true; btn.textContent='识别中…'; msg.textContent=''; msg.className='w-msg';
+    try{
+      const ext=((file.name||'').split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';
+      const path=`water/${SB.athlete}/${Date.now()}-${Math.floor(Math.random()*1e4)}.${ext}`;
+      const up=await fetch(`${SB.url}/storage/v1/object/well2go-meals/${path}`,{method:'POST',
+        headers:{apikey:SB.anon,Authorization:'Bearer '+SB.anon,'Content-Type':file.type||'image/jpeg'},body:file});
+      if(!up.ok) throw new Error('上传失败 '+up.status);
+      const image_url=`${SB.url}/storage/v1/object/public/well2go-meals/${path}`;
+      const res=await fetch(`${SB.url}/functions/v1/well2go-water-checkin`,{method:'POST',
+        headers:{apikey:SB.anon,Authorization:'Bearer '+SB.anon,'Content-Type':'application/json'},
+        body:JSON.stringify({athlete:SB.athlete,image_url})});
+      const r=await res.json();
+      if(r.pass){
+        msg.className='w-msg ok';
+        msg.textContent = r.capped ? '✅ 今日已达标啦' : `✅ 打卡成功 +${r.reward_ml}ml${r.reached?' · 达标 +500币！':''}`;
+        await fetchReal();
+      }else{
+        msg.className='w-msg bad'; msg.textContent='🚫 '+(r.reason||r.error||'这张不算喝水照');
+      }
+    }catch(e){ msg.className='w-msg bad'; msg.textContent='出错：'+e.message; }
+    btn.disabled=false; btn.textContent='📸 拍照打卡喝水';
+  }
+
+  // 🏋️ Technogym 运动消耗：截图上传→edge function 调 Qwen3-VL 抽 kcal→写 import_cal_am/pm
+  async function uploadTechnogym(file){
+    if(!file) return;
+    const btn=$('tCalBtn'), msg=$('tCalMsg'); btn.disabled=true; btn.textContent='识别中…'; msg.textContent='';
+    try{
+      const ext=((file.name||'').split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';
+      const path=`technogym/${SB.athlete}/${Date.now()}-${Math.floor(Math.random()*1e4)}.${ext}`;
+      const up=await fetch(`${SB.url}/storage/v1/object/well2go-meals/${path}`,{method:'POST',
+        headers:{apikey:SB.anon,Authorization:'Bearer '+SB.anon,'Content-Type':file.type||'image/jpeg'},body:file});
+      if(!up.ok) throw new Error('上传失败 '+up.status);
+      const image_url=`${SB.url}/storage/v1/object/public/well2go-meals/${path}`;
+      const res=await fetch(`${SB.url}/functions/v1/well2go-technogym-import`,{method:'POST',
+        headers:{apikey:SB.anon,Authorization:'Bearer '+SB.anon,'Content-Type':'application/json'},
+        body:JSON.stringify({athlete:SB.athlete,image_url})});
+      const r=await res.json();
+      if(r.ok){ msg.style.color='var(--lime)'; msg.textContent=`✅ 导入 ${r.kcal_total} 卡（上午${r.kcal_am}/下午${r.kcal_pm}）`; await fetchReal(); }
+      else{ msg.style.color='var(--fire)'; msg.textContent='🚫 '+(r.reason||r.error||'没读到运动消耗'); }
+    }catch(e){ msg.style.color='var(--fire)'; msg.textContent='出错：'+e.message; }
+    btn.disabled=false; btn.textContent='📷 导入 Technogym 消耗';
+  }
+
+  // 🏋️ 体测挑战：上传体测卡→Vision抽指标存快照；两张快照自动 A/B 出成绩
+  let BC=[];
+  async function fetchBodyComp(){
+    try{
+      const q=`${SB.url}/rest/v1/well2go_body_comp?athlete=eq.${SB.athlete}&order=day.desc&select=day,score,body_fat_pct,weight,skeletal_muscle,phase_angle,bmr`;
+      const r=await fetch(q,{headers:{apikey:SB.anon,Authorization:'Bearer '+SB.anon},cache:'no-store'});
+      BC=await r.json(); if(!Array.isArray(BC))BC=[];
+    }catch(_){ BC=[]; }
+    renderBodyComp();
+  }
+  function renderBodyComp(){
+    if(!BC.length){ $('bcScore').textContent='待上传'; $('bcDate').textContent=''; $('bcAB').textContent=''; return; }
+    const cur=BC[0];
+    $('bcScore').textContent = cur.score!=null?cur.score:'—';
+    $('bcDate').textContent = '· '+mmdd(cur.day);
+    const bits=[];
+    if(cur.body_fat_pct!=null) bits.push(`体脂 ${cur.body_fat_pct}%`);
+    if(cur.skeletal_muscle!=null) bits.push(`肌肉 ${cur.skeletal_muscle}`);
+    if(cur.weight!=null) bits.push(`体重 ${cur.weight}`);
+    if(cur.phase_angle!=null) bits.push(`相位角 ${cur.phase_angle}°`);
+    if(cur.bmr!=null) bits.push(`BMR ${cur.bmr}`);
+    $('bcStats').textContent = bits.join(' · ')||'已上传';
+    const prev=BC[1];
+    if(prev){
+      $('bcAB').style.color='';
+      const dd=(a,b)=>(a!=null&&b!=null)?Math.round((a-b)*10)/10:null;
+      const p=[]; let x;
+      if((x=dd(cur.body_fat_pct,prev.body_fat_pct))!=null) p.push(`体脂 ${x<=0?'↓':'↑'}${Math.abs(x)}%`);
+      if((x=dd(cur.skeletal_muscle,prev.skeletal_muscle))!=null) p.push(`肌肉 ${x>=0?'↑':'↓'}${Math.abs(x)}`);
+      if((x=dd(cur.score,prev.score))!=null) p.push(`评分 ${x>=0?'↑':'↓'}${Math.abs(x)}`);
+      if((x=dd(cur.phase_angle,prev.phase_angle))!=null) p.push(`相位角 ${x>=0?'↑':'↓'}${Math.abs(x)}°`);
+      $('bcAB').textContent = `📊 较上次（${mmdd(prev.day)}→${mmdd(cur.day)}）：`+(p.join(' · ')||'无可比指标');
+    } else { $('bcAB').style.color='var(--faint)'; $('bcAB').textContent='（再传一张就能自动 A/B 出成绩）'; }
+  }
+  async function uploadBodyComp(file){
+    if(!file) return;
+    const btn=$('bcBtn'), msg=$('bcMsg'); btn.disabled=true; btn.textContent='识别中…'; msg.textContent=''; msg.className='w-msg';
+    try{
+      const ext=((file.name||'').split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';
+      const path=`bodycomp/${SB.athlete}/${Date.now()}-${Math.floor(Math.random()*1e4)}.${ext}`;
+      const up=await fetch(`${SB.url}/storage/v1/object/well2go-meals/${path}`,{method:'POST',
+        headers:{apikey:SB.anon,Authorization:'Bearer '+SB.anon,'Content-Type':file.type||'image/jpeg'},body:file});
+      if(!up.ok) throw new Error('上传失败 '+up.status);
+      const image_url=`${SB.url}/storage/v1/object/public/well2go-meals/${path}`;
+      const res=await fetch(`${SB.url}/functions/v1/well2go-bodycomp-import`,{method:'POST',
+        headers:{apikey:SB.anon,Authorization:'Bearer '+SB.anon,'Content-Type':'application/json'},
+        body:JSON.stringify({athlete:SB.athlete,image_url})});
+      const r=await res.json();
+      if(r.ok){ msg.className='w-msg ok'; msg.textContent=`✅ ${mmdd(r.day)} 评分${r.score??'—'}·体脂${r.body_fat_pct??'—'}%`; await fetchBodyComp(); }
+      else{ msg.className='w-msg bad'; msg.textContent='🚫 '+(r.reason||r.error||'没读到体测数据'); }
+    }catch(e){ msg.className='w-msg bad'; msg.textContent='出错：'+e.message; }
+    btn.disabled=false; btn.textContent='📷 上传体测卡';
+  }
+
+  // 🎬 Flow 创作点数：取最新有 flow_points 的快照，消耗=较前一快照余额下降
+  function renderFlow(rows){
+    const fr=(Array.isArray(rows)?rows:[]).filter(r=>r.flow_points!=null);
+    if(!fr.length){ $('flowBal').textContent='暂无'; $('flowUsed').textContent='—'; $('flowAi').textContent='—'; return; }
+    const cur=fr[0], prev=fr[1];
+    $('flowBal').textContent=(+cur.flow_points).toLocaleString('zh-CN');
+    $('flowDay').textContent = cur.day===todayLocal() ? '今日' : mmdd(cur.day);
+    let used='—';
+    if(prev){ const d=(+prev.flow_points)-(+cur.flow_points); used = d>=0 ? d.toLocaleString('zh-CN') : '已重置'; }
+    $('flowUsed').textContent=used;
+    $('flowAi').textContent = cur.flow_ai_points!=null ? (+cur.flow_ai_points).toLocaleString('zh-CN') : '—';
+  }
+  // 数据新鲜度灰字提示(提示非告警):最新有数据的日子 vs 今天
+  function setFreshHint(){
+    const el=$('freshHint'); if(!el) return;
+    if(!DAYS.length){ el.textContent=''; el.className='fresh-hint'; return; }
+    const latest=DAYS[0].day, gap=Math.round((Date.parse(todayLocal())-Date.parse(latest))/864e5);
+    if(gap<=0){ el.textContent='🟢 最后更新 '+latest+' · 数据新鲜'; el.className='fresh-hint ok'; }
+    else if(gap===1){ el.textContent='最后更新 '+latest+' · 昨天'; el.className='fresh-hint'; }
+    else { el.textContent='💤 最后更新 '+latest+' · 已 '+gap+' 天无新数据 — 去手机戳一下 HAE / 做次运动'; el.className='fresh-hint stale'; }
+  }
+  async function fetchReal(){
+    $('rNote').textContent='读取中…';
+    try{
+      const q=`${SB.url}/rest/v1/well2go_daily_steps?athlete=eq.${SB.athlete}&order=day.desc&select=day,steps_am,steps_pm,calories_am,calories_pm,water_ml,basal_cal,strava_cal_am,strava_cal_pm,import_cal_am,import_cal_pm,flow_points,flow_ai_points`;
+      const r=await fetch(q,{headers:{apikey:SB.anon,Authorization:'Bearer '+SB.anon},cache:'no-store'});
+      const rows=await r.json();
+      renderFlow(rows);   // 🎬 Flow 点数（独立于日期选择，取最新快照）
+      // 运动场次（Strava → well2go_workouts），按天分组
+      WORKOUTS={};
+      try{
+        const wq=`${SB.url}/rest/v1/well2go_workouts?athlete=eq.${SB.athlete}&order=started_at.desc&select=day,sport_type,name,moving_seconds,distance_meters,calories_kcal`;
+        const wr=await fetch(wq,{headers:{apikey:SB.anon,Authorization:'Bearer '+SB.anon},cache:'no-store'});
+        const wrows=await wr.json();
+        if(Array.isArray(wrows)) for(const w of wrows){ (WORKOUTS[w.day]=WORKOUTS[w.day]||[]).push(w); }
+      }catch(_){}
+      const hasData=row=>((+row.steps_am||0)+(+row.steps_pm||0)+(+row.calories_am||0)+(+row.calories_pm||0)+(+row.water_ml||0)+(+row.strava_cal_am||0)+(+row.strava_cal_pm||0)+(+row.import_cal_am||0)+(+row.import_cal_pm||0))>0;
+      DAYS=(Array.isArray(rows)?rows:[]).filter(hasData);            // 所有有数据的天
+      // 汇总：仅游戏起算日起计入赚币/累计（钱包 = 每日币 + 节食餐币）
+      const gameDays=DAYS.filter(row=>row.day>=GAME_START);
+      DAILY_RAW=gameDays.reduce((s,row)=>s+coinsOf(row),0);
+      GAMEDAYS=gameDays.length;
+      const stepSum=gameDays.reduce((s,row)=>s+(+row.steps_am||0)+(+row.steps_pm||0),0);
+      $('rStepSum').textContent=stepSum.toLocaleString('zh-CN');
+      recomputeWallet();
+      SEL=0; renderChips(); renderDay(0); setFreshHint();
+    }catch(e){ $('rNote').textContent='⚠️ 读取失败：'+e.message; }
+  }
+
+  function renderChips(){
+    const box=$('dayChips'), today=todayLocal();
+    box.innerHTML='';
+    if(!DAYS.length){ box.innerHTML='<span class="empty">暂无数据，等 Apple 健康同步…</span>'; $('rNote').textContent=`游戏 ${GAME_START} 起算，暂无数据`; return; }
+    DAYS.forEach((row,i)=>{
+      const pre=row.day<GAME_START;
+      const c=document.createElement('div');
+      c.className='chip'+(i===SEL?' on':'')+(pre?' pre':'');
+      c.textContent=mmdd(row.day)+(row.day===today?' 今天':'')+(pre?' ·游戏前':'');
+      c.onclick=()=>{ SEL=i; renderChips(); renderDay(i); };
+      box.appendChild(c);
+    });
+  }
+
+  function renderDay(i){
+    const row=DAYS[i]||{}, today=todayLocal();
+    const day=row.day||today, isToday=row.day===today, inGame=row.day>=GAME_START;
+    const pfx=isToday?'今日':mmdd(day);
+    const sa=+row.steps_am||0,sp=+row.steps_pm||0;
+    const [ca,cp,calSrc]=effCal(row);
+    const stepTot=sa+sp, calTot=ca+cp, basal=+row.basal_cal||0;
+    const srcTag = calSrc==='strava' ? '🏃 Strava·运动记录' : calSrc==='technogym' ? '🏋️ Technogym·截图导入' : '⌚ Apple 健康';
+    $('realDay').textContent=day+(isToday?' · 今天':'');
+    $('rStepLbl').textContent=`🚶 ${pfx}步数`;
+    $('rCalLbl').textContent=`🔥 ${pfx}活动消耗`;
+    $('rCoinLbl').textContent=`✨ ${pfx}赚的币`;
+    $('rSteps').textContent=stepTot.toLocaleString('zh-CN');
+    $('rStepsSub').textContent=`上午 ${sa.toLocaleString('zh-CN')} · 下午 ${sp.toLocaleString('zh-CN')}`;
+    $('rCal').textContent=Math.round(calTot).toLocaleString('zh-CN');
+    $('rCalSub').textContent=`上午 ${Math.round(ca)} · 下午 ${Math.round(cp)} 大卡 · ${srcTag}`;
+    $('rBasal').textContent=basal?Math.round(basal).toLocaleString('zh-CN')+' 大卡':'待同步';
+    $('rTotal').textContent=basal?Math.round(basal+calTot).toLocaleString('zh-CN')+' 大卡':'待同步';
+    renderWorkouts(day);
+    // 🎬 Flow 点数在 renderFlow() 里独立渲染（取最新快照，不随日期切换）
+    $('rCoinToday').textContent=(inGame?coinsOf(row):0).toLocaleString('zh-CN');
+    $('rCoinTodayDay').textContent=inGame?`${day} · 扣4000基础步 + 含饮水任务`:`${day} · 游戏前，不计入赚币`;
+    const wat=+row.water_ml||0;
+    $('wFill').style.width=Math.min(100,Math.round(wat/WATER_GOAL*100))+'%';
+    $('wText').textContent=`${wat.toLocaleString('zh-CN')} / ${WATER_GOAL} ml`;
+    $('wStatus').innerHTML = wat>=WATER_GOAL ? '<span class="ok">✅ 达标 +500 币</span>' : `还差 ${(WATER_GOAL-wat).toLocaleString('zh-CN')} ml`;
+    $('rNote').textContent = inGame?`✅ ${day} · 上午×${m} · 游戏${GAME_START}起算`:`${day} · 游戏前不计入赚币（仅回看）`;
+  }
+  // 🏋️ 今日锻炼：Strava 运动场次（时长/距离/类型）
+  function renderWorkouts(day){
+    const box=$('rWorkouts'), list=WORKOUTS[day]||[];
+    if(!list.length){ box.innerHTML='<div class="wo-empty">🏋️ 今日锻炼：暂无运动记录（Strava 同步后显示时长/距离）</div>'; return; }
+    const totMin=Math.round(list.reduce((s,w)=>s+(+w.moving_seconds||0),0)/60);
+    const rows=list.map(w=>{
+      const min=Math.round((+w.moving_seconds||0)/60);
+      const km=(+w.distance_meters||0)/1000, cal=Math.round(+w.calories_kcal||0);
+      const sp=SPORT[w.sport_type]||['🏃',w.sport_type||'运动'];
+      const kmTxt=km>=0.05?` · ${km.toFixed(2)}km`:'';
+      return `<div class="wo-row"><span class="wo-t">${sp[0]} ${sp[1]}</span><span class="wo-m">${min}分${kmTxt} · ${cal}卡</span></div>`;
+    }).join('');
+    box.innerHTML=`<div class="wo-head"><span class="ic">🏋️</span>今日锻炼 <b>${totMin}</b> 分钟 <i>${list.length} 场</i></div>${rows}`;
+  }
+  $('mUpBtn').addEventListener('click',()=>$('mFile').click());
+  $('mFile').addEventListener('change',e=>{ const f=e.target.files&&e.target.files[0]; uploadMeal(f); e.target.value=''; });
+  $('wUpBtn').addEventListener('click',()=>$('wFile').click());
+  $('wFile').addEventListener('change',e=>{ const f=e.target.files&&e.target.files[0]; uploadWater(f); e.target.value=''; });
+  $('tCalBtn').addEventListener('click',()=>$('tCalFile').click());
+  $('tCalFile').addEventListener('change',e=>{ const f=e.target.files&&e.target.files[0]; uploadTechnogym(f); e.target.value=''; });
+  $('bcBtn').addEventListener('click',()=>$('bcFile').click());
+  $('bcFile').addEventListener('change',e=>{ const f=e.target.files&&e.target.files[0]; uploadBodyComp(f); e.target.value=''; });
+  $('rRefresh').addEventListener('click',()=>{fetchReal();fetchMeals();fetchBodyComp();});
+  fetchReal(); fetchMeals(); fetchBodyComp();
+</script>
+</body>
+</html>

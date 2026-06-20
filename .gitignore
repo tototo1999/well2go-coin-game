@@ -1,0 +1,14 @@
+# real secrets — never commit
+app/config.js
+.env
+.env.local
+supabase/.env
+
+# build / deps
+node_modules/
+ios/App/App/public/
+ios/App/Pods/
+ios/App/build/
+*.xcarchive
+DerivedData/
+.DS_Store
