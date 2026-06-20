@@ -79,6 +79,8 @@ Deno.serve(async (req) => {
   try {
     const { athlete, image_url, day } = await req.json();
     if (!athlete || !image_url) return json({ error: "缺 athlete / image_url" }, 400);
+    if (!String(image_url).startsWith(`${SB_URL}/storage/v1/object/public/well2go-meals/`))
+      return json({ error: "image_url 必须是本项目 well2go-meals 桶的公开 URL" }, 400);
     const d = (day || new Date().toISOString().slice(0, 10));
 
     const v = await judge(image_url);

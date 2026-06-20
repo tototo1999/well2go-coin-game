@@ -31,7 +31,7 @@ async function sget(tok: string, path: string) {
 
 Deno.serve(async (req) => {
   try {
-    const days = Number(new URL(req.url).searchParams.get("days") || 3);
+    const days = Math.min(30, Math.max(1, Number(new URL(req.url).searchParams.get("days")) || 3));
     const after = Math.floor(Date.now() / 1000) - days * 86400;
     const tok = await accessToken();
     const acts: any[] = await sget(tok, `/athlete/activities?after=${after}&per_page=50`);

@@ -63,7 +63,8 @@ create table if not exists public.well2go_workouts (
   raw_json             jsonb not null default '{}',
   deleted_at           timestamptz,
   created_at           timestamptz not null default now(),
-  updated_at           timestamptz not null default now()
+  updated_at           timestamptz not null default now(),
+  unique (provider, external_id)
 );
 create index if not exists well2go_workouts_athlete_day on public.well2go_workouts (athlete, day);
 create index if not exists well2go_workouts_extid on public.well2go_workouts (external_id);

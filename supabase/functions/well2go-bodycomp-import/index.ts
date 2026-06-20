@@ -68,6 +68,8 @@ Deno.serve(async (req) => {
   try {
     const { athlete, image_url } = await req.json();
     if (!athlete || !image_url) return json({ error: "缺 athlete / image_url" }, 400);
+    if (!String(image_url).startsWith(`${SB_URL}/storage/v1/object/public/well2go-meals/`))
+      return json({ error: "image_url 必须是本项目 well2go-meals 桶的公开 URL" }, 400);
     const v = await extract(image_url);
     if (v.is_report !== true) return json({ ok: false, reason: v.note || "这张不像体测报告", verdict: v });
     const md = (typeof v.measure_date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v.measure_date))

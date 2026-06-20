@@ -75,6 +75,8 @@ cp app/config.example.js app/config.js
 ```
 编辑 `app/config.js`,填你的 Supabase `url` / `anon`(后台 → Project Settings → API)和 `athlete`(跟上面一致)。
 
+> ⚠️ **必须先建 `config.js`,否则页面打开后读不到任何数据**(会提示"未配置")。`athlete` 请**全部小写**,和密钥里的保持一致——大小写不一致会导致"数据进了库但前端查不到"。
+
 本地预览:
 ```bash
 cd app && python3 -m http.server 8080      # 打开 http://localhost:8080
@@ -90,10 +92,19 @@ cd app && python3 -m http.server 8080      # 打开 http://localhost:8080
   https://<你的项目ref>.supabase.co/functions/v1/well2go-steps-ingest?token=<你的INGEST_TOKEN>&athlete=<你的名字>
   ```
   详见 `shortcuts/README.md`(含 body 格式说明,支持 HAE 格式和直接 `{steps_am,steps_pm,...}` 格式)。
-- **运动记录(可选)**:配好 Strava 密钥后,在 Supabase 里加个 pg_cron 定时调用 `well2go-strava-sync`(或手动调一次试):
+- **运动记录(可选)**:配好 Strava 密钥后,先手动调一次验证:
   ```
   curl "https://<ref>.supabase.co/functions/v1/well2go-strava-sync?days=7"
   ```
+  要每天自动同步,在 Supabase 后台 SQL Editor 跑一次下面的 pg_cron(把 `<ref>` 换成你的项目 ref):
+  ```sql
+  create extension if not exists pg_cron;
+  create extension if not exists pg_net;
+  select cron.schedule('well2go-strava', '0 1 * * *', $$
+    select net.http_get(url := 'https://<ref>.supabase.co/functions/v1/well2go-strava-sync?days=3');
+  $$);
+  ```
+  > 也可以直接用 Supabase 后台 **Database → Cron** 图形化界面建,免写 SQL。
 - **运动消耗 / 体测**:也可以在 App 里直接拍 Technogym/InBody 截图上传,AI 自动读数入库,不依赖上面两条。
 
 ### 6.(可选)打包成 iPhone App
@@ -131,7 +142,10 @@ npx cap copy ios
 也就是说,**任何拿到你 anon key 的人,把 athlete 换成你的名字就能看你的数据**。
 自己/小圈子用没问题;**别拿这套直接对陌生人公开**——那需要改成「登录 + 每人只能看自己」的多用户鉴权模型。
 
-防作弊的部分(喝水 +500、体测、运动消耗写入)都走 service role 服务端校验,前端伪造不了。
+**关于"防作弊"要说准确**:加分写入(喝水 +500、运动消耗、体测)都走 service role 在服务端完成,且 AI 看图判定的**内容**前端伪造不了。**但** `athlete` 字段是调用方自填的、函数没有身份绑定——单人部署下无所谓(只有你一个人),但这意味着任何能调到你函数的人都能往你的 athlete 写合法打卡数据。识图函数已限制只接受本项目存储桶的图片 URL,降低被当成开放 AI 接口刷额度的风险。真要对陌生人开放,必须加登录鉴权、把 athlete 绑定到认证身份。
+
+> **Flow 创作点数面板**:`flow_points` 这两列没有内置的写入函数(原作者另有外部来源),新部署里这个面板会一直显示"暂无",属正常。
+> **依赖**:迁移用到 `storage` schema,需要 Supabase 托管环境(或自建 supabase storage-api)。
 
 ---
 

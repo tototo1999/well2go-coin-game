@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Lexi 健康养成搞钱闯关游戏</title>
+  <title>健康养成搞钱闯关游戏</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;800;900&family=Martian+Mono:wght@500;600;700;800&family=Noto+Sans+SC:wght@500;700;900&display=swap" rel="stylesheet">
@@ -207,7 +207,7 @@
       </svg>
     </div>
     <div style="flex:1;min-width:0">
-      <h1>Lexi 健康养成搞钱闯关游戏</h1>
+      <h1 id="brandH1">健康养成搞钱闯关游戏</h1>
       <div class="sub">WALK · BURN → COINS → 闯关搞钱 💰</div>
     </div>
   </header>
@@ -221,7 +221,7 @@
   <!-- 真实数据 -->
   <section class="panel s1">
     <h3 class="ph"><span class="dot"></span>真实战绩 <span class="tip" id="realDay">读取中…</span></h3>
-    <div class="banner">🎮 游戏 <b>2026-06-04</b> 起正式开始 · 数据来自 Apple 健康 / Strava 自动同步</div>
+    <div class="banner">🎮 游戏 <b class="js-gamestart">2026-06-04</b> 起正式开始 · 数据来自 Apple 健康 / Strava 自动同步</div>
     <div id="freshHint" class="fresh-hint"></div>
     <div class="day-chips" id="dayChips"></div>
     <div class="tiles">
@@ -238,7 +238,7 @@
       <div class="seg">😴 基础代谢<b id="rBasal">—</b><i>躺着也烧 · 不赚币</i></div>
       <div class="seg">📊 今日总消耗<b id="rTotal">—</b><i>基础 + 活动</i></div>
     </div>
-    <div class="minsum"><span>📊 总步数 <b class="s" id="rStepSum">—</b></span><span style="color:var(--faint)">游戏 2026-06-04 起算</span></div>
+    <div class="minsum"><span>📊 总步数 <b class="s" id="rStepSum">—</b></span><span style="color:var(--faint)">游戏 <span class="js-gamestart">2026-06-04</span> 起算</span></div>
     <div class="real-foot"><button class="rbtn" id="rRefresh">🔄 刷新</button><button class="rbtn" id="tCalBtn">📷 导入 Technogym 消耗</button><span id="tCalMsg" style="font-size:11px;font-weight:800;margin-left:6px"></span><span id="rNote"></span></div>
     <input type="file" id="tCalFile" accept="image/*" capture="environment" style="display:none">
     <div class="nt-src">💡 步数 / 活动卡路里会自动同步（Apple 健康 + Strava 每天自动拉）。万一哪天没数据，点上面「📷 导入 Technogym 消耗」截图手动补上即可。</div>
@@ -306,11 +306,11 @@
       <div class="r"><span class="k">卡路里</span><span>活动消耗并行读取 <b>Strava / Technogym / Apple 健康</b>，按上午/下午各取最大值，避免漏算也避免重复相加</span></div>
       <div class="r"><span class="k">任务</span><span>NPC 每日任务：喝够 <code>1500ml</code> → <code>+500 币</code></span></div>
       <div class="r"><span class="k">提现</span><span><code>100 币 = 1 元</code>，游戏币上限 <code>50 万</code>（= 可提现 ¥5,000）</span></div>
-      <div class="r"><span class="k">起算</span><span>游戏 <code>2026-06-04</code> 起正式开始，之前的数据不计入</span></div>
+      <div class="r"><span class="k">起算</span><span>游戏 <code class="js-gamestart">2026-06-04</code> 起正式开始，之前的数据不计入</span></div>
     </div>
   </section>
 
-  <footer>Lexi 健康养成搞钱闯关游戏 · 初始版规则 Demo<br>步数 / 卡路里折币 · 上午倍率 · 提现均按规则文档实现</footer>
+  <footer id="brandFoot">健康养成搞钱闯关游戏 · 初始版规则<br>步数 / 卡路里折币 · 上午倍率 · 提现均按规则文档实现</footer>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -326,8 +326,13 @@
   // —— 配置全部来自 config.js（window.WELL2GO_CONFIG）。复制 config.example.js → config.js 改成你自己的。
   const CFG = window.WELL2GO_CONFIG || {};
   const GAME_START = CFG.gameStart || '2026-06-04';   // 游戏起算日：此日之前的数据不计入
-  // 单人模式：本卡只统计这一个 athlete（读自己的 Supabase，受 RLS 保护）
-  const SB = { url: CFG.url || '', anon: CFG.anon || '', athlete: (CFG.athlete || 'me') };
+  // 单人模式：本卡只统计这一个 athlete（读自己的 Supabase，受 RLS 保护）。athlete 强制小写,和后端 ingest 一致,避免"数据进了库前端按大写查不到"。
+  const SB = { url: CFG.url || '', anon: CFG.anon || '', athlete: String(CFG.athlete || 'me').toLowerCase() };
+  const BRAND = CFG.brand || '健康养成搞钱闯关游戏';
+  // 模板化:用 config 的 brand / gameStart 填静态文案(本脚本在这些元素之后,可直接取)
+  document.title = BRAND;
+  (document.getElementById('brandH1') || {}).textContent = BRAND;
+  document.querySelectorAll('.js-gamestart').forEach(el => el.textContent = GAME_START);
   const $=id=>document.getElementById(id);
   function todayLocal(){const d=new Date(),z=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate());}
 
@@ -556,6 +561,11 @@
     else { el.textContent='💤 最后更新 '+latest+' · 已 '+gap+' 天无新数据 — 去手机戳一下 HAE / 做次运动'; el.className='fresh-hint stale'; }
   }
   async function fetchReal(){
+    if(!SB.url || !SB.anon){
+      $('rNote').textContent='⚠️ 未配置 — 请把 app/config.example.js 复制成 config.js 并填你自己的 Supabase url / anon / athlete';
+      $('dayChips').innerHTML='<span class="empty">未配置 config.js,读不到数据</span>';
+      return;
+    }
     $('rNote').textContent='读取中…';
     try{
       const q=`${SB.url}/rest/v1/well2go_daily_steps?athlete=eq.${SB.athlete}&order=day.desc&select=day,steps_am,steps_pm,calories_am,calories_pm,water_ml,basal_cal,strava_cal_am,strava_cal_pm,import_cal_am,import_cal_pm,flow_points,flow_ai_points`;

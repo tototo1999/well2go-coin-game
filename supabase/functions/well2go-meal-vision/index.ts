@@ -60,6 +60,9 @@ Deno.serve(async (req) => {
   try {
     const { image_url } = await req.json();
     if (!image_url) return json({ error: "缺 image_url" }, 400);
+    // 只处理本项目 well2go-meals 存储桶的公开 URL,防止该端点被当成开放 AI 接口刷 OpenRouter 额度
+    if (!String(image_url).startsWith(`${SB_URL}/storage/v1/object/public/well2go-meals/`))
+      return json({ error: "image_url 必须是本项目 well2go-meals 桶的公开 URL" }, 400);
     const v = await estimate(image_url);
     if (v.is_food !== true) return json({ ok: false, reason: v.note || "这张不像食物餐", verdict: v });
     const kcal = Math.max(0, Math.round(Number(v.est_kcal) || 0));
