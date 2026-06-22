@@ -9,14 +9,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;800;900&family=Martian+Mono:wght@500;600;700;800&family=Noto+Sans+SC:wght@500;700;900&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#0a0b0e;
-      --panel:rgba(255,255,255,.035); --panel2:rgba(255,255,255,.06);
-      --line:rgba(255,255,255,.09); --line2:rgba(255,255,255,.16);
-      --ink:#f4f0e6; --muted:#8e919c; --faint:#666974;
-      --gold:#ffd24a; --gold2:#ffab17;
-      --lime:#bdf24a; --lime2:#8fd61f;
-      --fire:#ff7e42; --fire2:#ff3f24;
-      --cyan:#3bd8ee; --cyan2:#15b2d6;
+      --bg:#fff6f1;
+      --panel:#ffffff; --panel2:#fdeef1;
+      --line:rgba(150,110,118,.16); --line2:rgba(150,110,118,.28);
+      --ink:#5b4a44; --muted:#a3908a; --faint:#c8b8b0;
+      --gold:#dd9f34; --gold2:#efb84c;
+      --lime:#4fb487; --lime2:#3da876;
+      --fire:#ec7e98; --fire2:#e86d8a;
+      --cyan:#54bccf; --cyan2:#39aec2;
       --cjk:"Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
       --mono:"Martian Mono",ui-monospace,"SF Mono",Menlo,monospace;
       --lat:"Archivo",var(--cjk);
@@ -28,20 +28,20 @@
       min-height:100vh; position:relative; overflow-x:hidden;
       -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
       background:
-        radial-gradient(880px 520px at 8% -12%, rgba(255,170,30,.20), transparent 58%),
-        radial-gradient(760px 460px at 104% -4%, rgba(55,214,238,.11), transparent 54%),
-        radial-gradient(820px 760px at 50% 128%, rgba(189,242,74,.07), transparent 60%),
+        radial-gradient(940px 580px at 12% -12%, rgba(150,224,196,.72), transparent 60%),
+        radial-gradient(800px 500px at 104% 4%, rgba(168,230,207,.55), transparent 56%),
+        radial-gradient(760px 640px at 50% 132%, rgba(255,214,224,.5), transparent 60%),
         var(--bg);
     }
     body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.045;mix-blend-mode:overlay;
       background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
     body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
-      background-image:linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);
+      background-image:linear-gradient(rgba(150,110,120,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(150,110,120,.05) 1px,transparent 1px);
       background-size:36px 36px;-webkit-mask:radial-gradient(circle at 50% 16%,#000,transparent 72%);mask:radial-gradient(circle at 50% 16%,#000,transparent 72%);}
     button{font:inherit;cursor:pointer;}
 
     @keyframes rise{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;}}
-    @keyframes glow{0%,100%{text-shadow:0 0 18px rgba(255,200,60,.45);}50%{text-shadow:0 0 34px rgba(255,200,60,.85);}}
+    @keyframes glow{0%,100%{text-shadow:0 1px 2px rgba(180,120,90,.18);}50%{text-shadow:0 1px 6px rgba(221,159,52,.3);}}
     @keyframes spin{0%,100%{transform:rotateY(0);}50%{transform:rotateY(180deg);}}
     @keyframes slide{to{background-position:200% 0;}}
 
@@ -50,18 +50,19 @@
     /* header + wallet */
     .brand{display:flex;align-items:center;gap:14px;animation:rise .5s ease both;}
     .mark{flex:0 0 auto;width:56px;height:56px;border-radius:17px;display:grid;place-items:center;position:relative;
-      background:linear-gradient(155deg,#1d2128,#0d1014);border:1px solid rgba(255,255,255,.1);
-      box-shadow:0 12px 28px rgba(0,0,0,.5),0 0 24px rgba(255,190,40,.16),inset 0 1px 1px rgba(255,255,255,.08);}
+      background:linear-gradient(155deg,#ffffff,#e6f6ee);border:1px solid rgba(120,205,170,.75);
+      box-shadow:0 10px 24px rgba(220,160,172,.3),0 0 22px rgba(255,210,221,.5),inset 0 1px 1px rgba(255,255,255,.7);}
     .mark svg{width:36px;height:36px;display:block;}
+    .mark img.logoimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:16px;}
     .brand h1{margin:0;font-weight:900;font-size:clamp(20px,5.4vw,24px);letter-spacing:-.3px;line-height:1.15;
-      background:linear-gradient(180deg,#fff,#ffe39a);-webkit-background-clip:text;background-clip:text;color:transparent;}
+      background:linear-gradient(120deg,#36a07a,#73c7a4);-webkit-background-clip:text;background-clip:text;color:transparent;}
     .brand .sub{margin-top:3px;font-size:12px;font-weight:700;color:var(--muted);font-family:var(--lat);letter-spacing:.2px;}
     .estrip{height:3px;border-radius:3px;margin:15px 0 0;background:linear-gradient(90deg,var(--lime),var(--gold),var(--fire),var(--cyan),var(--lime));background-size:200% 100%;animation:slide 7s linear infinite;opacity:.85;}
 
     .wallet{display:flex;gap:11px;margin:15px 0 18px;animation:rise .55s ease both .05s;}
     .wcard{flex:1;min-width:0;border-radius:16px;padding:13px 15px;border:1px solid var(--line);background:var(--panel);}
-    .wcard.coin{background:linear-gradient(160deg,rgba(255,210,74,.15),rgba(255,170,23,.04));border-color:rgba(255,210,74,.3);}
-    .wcard.cash{background:linear-gradient(160deg,rgba(255,126,66,.12),rgba(255,63,36,.03));border-color:rgba(255,126,66,.26);}
+    .wcard.coin{background:linear-gradient(160deg,rgba(245,205,110,.34),rgba(255,236,190,.18));border-color:rgba(221,159,52,.42);}
+    .wcard.cash{background:linear-gradient(160deg,rgba(255,198,210,.55),rgba(255,226,228,.28));border-color:rgba(236,126,152,.42);}
     .wcard .wl{font-size:10.5px;font-weight:800;color:var(--muted);font-family:var(--lat);letter-spacing:.4px;}
     .wcard .wv{display:block;margin-top:5px;font-family:var(--mono);font-weight:800;font-size:23px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
     .wcard.coin .wv{color:var(--gold);} .wcard.cash .wv{color:var(--fire);}
@@ -69,15 +70,15 @@
 
     /* panels */
     .panel{border-radius:20px;border:1px solid var(--line);background:linear-gradient(180deg,var(--panel),rgba(255,255,255,.012));
-      padding:20px 18px;margin-bottom:16px;box-shadow:0 22px 54px rgba(0,0,0,.42);animation:rise .6s ease both;}
+      padding:20px 18px;margin-bottom:16px;box-shadow:0 16px 38px rgba(214,170,182,.24);animation:rise .6s ease both;}
     .panel.s1{animation-delay:.1s;} .panel.s2{animation-delay:.16s;} .panel.s3{animation-delay:.22s;}
     .ph{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:900;margin:0 0 15px;}
     .ph .dot{width:9px;height:9px;border-radius:50%;background:var(--lime);box-shadow:0 0 10px var(--lime);}
     .ph .tip{margin-left:auto;font-size:10.5px;font-weight:700;color:var(--muted);font-family:var(--mono);letter-spacing:-.3px;}
 
     .banner{display:flex;gap:8px;align-items:center;padding:10px 13px;border-radius:12px;font-size:12px;font-weight:700;line-height:1.5;
-      background:rgba(255,210,74,.07);border:1px dashed rgba(255,210,74,.3);color:var(--gold);margin-bottom:14px;}
-    .banner b{color:#fff;}
+      background:rgba(168,230,207,.32);border:1px dashed rgba(79,180,135,.5);color:#3da876;margin-bottom:14px;}
+    .banner b{color:#4a3f3a;}
     .fresh-hint{font-size:11px;color:#8c8c8c;font-weight:600;margin:-8px 2px 14px;letter-spacing:.02em}
     .fresh-hint.stale{color:#bda35f}   /* 淡琥珀:轻提示,非红色告警 */
     .fresh-hint.ok{color:#6f9a6f}
@@ -102,8 +103,8 @@
     .tile small{position:relative;display:block;margin-top:6px;font-size:10.5px;color:var(--faint);font-weight:700;line-height:1.5;}
 
     .hero{position:relative;margin-top:11px;border-radius:18px;padding:21px 18px;text-align:center;overflow:hidden;
-      background:radial-gradient(125% 150% at 50% -10%,rgba(255,210,74,.24),rgba(255,170,23,.04) 58%,transparent),rgba(255,255,255,.02);
-      border:1px solid rgba(255,210,74,.34);}
+      background:radial-gradient(125% 150% at 50% -10%,rgba(245,205,110,.4),rgba(255,236,190,.12) 58%,transparent),#ffffff;
+      border:1px solid rgba(221,159,52,.38);}
     .hero .l{font-size:12.5px;font-weight:850;color:var(--gold);font-family:var(--lat);letter-spacing:.5px;text-transform:uppercase;}
     .hero .coinwrap{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:6px;}
     .hero .icon{font-size:30px;display:inline-block;animation:spin 3.8s ease-in-out infinite;filter:drop-shadow(0 4px 10px rgba(255,180,30,.5));}
@@ -125,10 +126,10 @@
     .wo-empty{font-size:11.5px;color:var(--faint);font-weight:700;}
     /* Token 疯狂燃烧 */
     .tok-hero{text-align:center;border-radius:16px;padding:16px;overflow:hidden;
-      background:radial-gradient(125% 150% at 50% -10%,rgba(255,90,40,.22),rgba(255,63,36,.04) 60%,transparent),rgba(255,255,255,.02);
-      border:1px solid rgba(255,90,40,.32);}
+      background:radial-gradient(125% 150% at 50% -10%,rgba(255,190,205,.55),rgba(255,226,228,.16) 60%,transparent),#ffffff;
+      border:1px solid rgba(236,126,152,.38);}
     .tok-hero .l{font-size:12px;font-weight:850;color:var(--fire);font-family:var(--lat);letter-spacing:.4px;}
-    .tok-hero .v{margin-top:5px;font-family:var(--mono);font-weight:800;font-size:clamp(25px,8.5vw,38px);line-height:1;color:var(--fire);text-shadow:0 0 24px rgba(255,90,40,.55);animation:glow 3.2s ease-in-out infinite;}
+    .tok-hero .v{margin-top:5px;font-family:var(--mono);font-weight:800;font-size:clamp(25px,8.5vw,38px);line-height:1;color:var(--fire);text-shadow:0 1px 6px rgba(236,126,152,.35);animation:glow 3.2s ease-in-out infinite;}
     .tok-hero small{display:block;margin-top:8px;font-size:10.5px;color:var(--muted);font-weight:700;}
     .tok-sub{display:flex;gap:10px;margin-top:11px;}
     .tok-sub .seg{flex:1;text-align:center;border-radius:13px;padding:11px 8px;background:var(--panel);border:1px solid var(--line);font-size:11.5px;font-weight:800;color:var(--muted);}
@@ -149,7 +150,7 @@
     .nt-head{display:flex;justify-content:space-between;align-items:center;}
     .nt-title{font-size:15px;font-weight:900;}
     .nt-reward{font-size:11px;font-weight:850;color:var(--gold);background:rgba(255,210,74,.12);border:1px solid rgba(255,210,74,.26);padding:3px 10px;border-radius:9px;}
-    .nt-bar{margin-top:12px;height:14px;border-radius:9px;background:rgba(255,255,255,.06);border:1px solid var(--line);overflow:hidden;}
+    .nt-bar{margin-top:12px;height:14px;border-radius:9px;background:#f5e3e8;border:1px solid var(--line);overflow:hidden;}
     .nt-fill{height:100%;width:0;border-radius:9px;background:linear-gradient(90deg,var(--cyan2),var(--cyan));box-shadow:0 0 16px rgba(55,214,238,.55);transition:width .7s cubic-bezier(.2,.8,.2,1);}
     .nt-foot{margin-top:9px;display:flex;justify-content:space-between;font-size:12.5px;font-weight:850;color:var(--muted);}
     .nt-foot .ok{color:var(--lime);}
@@ -177,10 +178,10 @@
     .rules .r:last-child{border:none;}
     .rules .k{flex:0 0 auto;min-width:30px;font-family:var(--lat);font-weight:800;color:var(--gold);}
     .rules code{font-family:var(--mono);background:rgba(255,210,74,.1);color:var(--gold);padding:1px 6px;border-radius:5px;font-weight:700;font-size:11px;}
-    .rules b{color:#fff;}
+    .rules b{color:#4a3f3a;}
 
     footer{margin-top:26px;text-align:center;font-size:11px;color:var(--faint);font-weight:600;line-height:1.7;}
-    .toast{position:fixed;left:50%;bottom:40px;transform:translateX(-50%);background:#15171b;color:#fff;font-weight:800;font-size:14px;padding:12px 22px;border-radius:999px;border:1px solid var(--line2);box-shadow:0 16px 40px rgba(0,0,0,.5);opacity:0;transition:opacity .3s;z-index:60;}
+    .toast{position:fixed;left:50%;bottom:40px;transform:translateX(-50%);background:#5b4a44;color:#fff;font-weight:800;font-size:14px;padding:12px 22px;border-radius:999px;border:1px solid var(--line2);box-shadow:0 16px 40px rgba(0,0,0,.5);opacity:0;transition:opacity .3s;z-index:60;}
     .toast.show{opacity:1;}
   </style>
 </head>
@@ -189,22 +190,7 @@
 
   <header class="brand">
     <div class="mark">
-      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="WELL2GO">
-        <defs>
-          <linearGradient id="ringG" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stop-color="#c4f24a"/><stop offset="1" stop-color="#3bd8ee"/>
-          </linearGradient>
-          <linearGradient id="boltG" x1="16" y1="7" x2="32" y2="41" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stop-color="#ffe680"/><stop offset="1" stop-color="#ffab17"/>
-          </linearGradient>
-          <filter id="gl" x="-60%" y="-60%" width="220%" height="220%">
-            <feGaussianBlur stdDeviation="1.3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-        </defs>
-        <circle cx="24" cy="24" r="17" stroke="url(#ringG)" stroke-width="3.3" stroke-linecap="round"
-                stroke-dasharray="80 28" transform="rotate(125 24 24)" filter="url(#gl)"/>
-        <path d="M27 7 L14 27 L22 27 L20 41 L34 20 L26 20 Z" fill="url(#boltG)" filter="url(#gl)"/>
-      </svg>
+      <img class="logoimg" alt="胖鸟减肥" src="data:image/jpeg;base64,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">
     </div>
     <div style="flex:1;min-width:0">
       <h1 id="brandH1">健康养成搞钱闯关游戏</h1>
@@ -240,7 +226,7 @@
     </div>
     <div class="minsum"><span>📊 总步数 <b class="s" id="rStepSum">—</b></span><span style="color:var(--faint)">游戏 <span class="js-gamestart">2026-06-04</span> 起算</span></div>
     <div class="real-foot"><button class="rbtn" id="rRefresh">🔄 刷新</button><button class="rbtn" id="tCalBtn">📷 导入 Technogym 消耗</button><span id="tCalMsg" style="font-size:11px;font-weight:800;margin-left:6px"></span><span id="rNote"></span></div>
-    <input type="file" id="tCalFile" accept="image/*" capture="environment" style="display:none">
+    <input type="file" id="tCalFile" accept="image/*" style="display:none">
     <div class="nt-src">💡 步数 / 活动卡路里会自动同步（Apple 健康 + Strava 每天自动拉）。万一哪天没数据，点上面「📷 导入 Technogym 消耗」截图手动补上即可。</div>
   </section>
 
@@ -263,7 +249,7 @@
       <div class="nt-bar"><div class="nt-fill" id="wFill"></div></div>
       <div class="nt-foot"><span id="wText">— / 1500 ml</span><span id="wStatus">—</span></div>
       <div class="w-up"><span class="w-msg" id="wMsg"></span><button id="wUpBtn">📸 拍照打卡喝水</button></div>
-      <input type="file" id="wFile" accept="image/*" capture="environment" style="display:none">
+      <input type="file" id="wFile" accept="image/*" style="display:none">
       <div class="nt-src">📷 拍带水位的水杯/水瓶打卡，AI 识别真喝水才 +500ml（3 次满 1500 → +500币）· 智能杯后续自动同步</div>
     </div>
   </section>
@@ -292,33 +278,35 @@
     </div>
     <div class="bc-ab" id="bcAB"></div>
     <div class="w-up"><span class="w-msg" id="bcMsg"></span><button id="bcBtn" style="border-color:rgba(255,138,61,.42);background:rgba(255,138,61,.12);color:var(--fire)">📷 上传体测卡</button></div>
-    <input type="file" id="bcFile" accept="image/*" capture="environment" style="display:none">
+    <input type="file" id="bcFile" accept="image/*" style="display:none">
     <div class="nt-src">📷 传体测报告 → 抽评分/体脂/肌肉/相位角/BMR；隔约 2 周再传一张，自动 A/B 出成绩单</div>
   </section>
 
   <section class="panel s3">
-    <h3 class="ph"><span class="dot" style="background:var(--gold);box-shadow:0 0 10px var(--gold)"></span>初始版规则</h3>
+    <h3 class="ph"><span class="dot" style="background:var(--gold);box-shadow:0 0 10px var(--gold)"></span>赚币规则 v1.0</h3>
     <div class="rules">
-      <div class="r"><span class="k">赚币</span><span>1 步 = <code>15 币</code>，1 大卡 = <code>15 币</code></span></div>
+      <div class="r"><span class="k">赚币</span><span>1 大卡 = <code>10 币</code>，每 <code>10 步</code> = 1 币</span></div>
       <div class="r"><span class="k">基础</span><span>每天前 <code>4000 步</code>为基础步数，<b>不计入赚币</b>，超出部分才给币</span></div>
       <div class="r"><span class="k">上午</span><span>00:00–12:00 走路 + 燃脂币数 <code>×2</code>（可升级到 ×3 / ×4）</span></div>
       <div class="r"><span class="k">下午</span><span>12:00 之后按基础原价，无加成</span></div>
       <div class="r"><span class="k">卡路里</span><span>活动消耗并行读取 <b>Strava / Technogym / Apple 健康</b>，按上午/下午各取最大值，避免漏算也避免重复相加</span></div>
       <div class="r"><span class="k">任务</span><span>NPC 每日任务：喝够 <code>1500ml</code> → <code>+500 币</code></span></div>
-      <div class="r"><span class="k">提现</span><span><code>100 币 = 1 元</code>，游戏币上限 <code>50 万</code>（= 可提现 ¥5,000）</span></div>
+      <div class="r"><span class="k">提现</span><span><code>5 币 = 1 元</code>，游戏币上限 <code>5 千币</code>（= 可提现 <b>¥1,000</b>）</span></div>
       <div class="r"><span class="k">起算</span><span>游戏 <code class="js-gamestart">2026-06-04</code> 起正式开始，之前的数据不计入</span></div>
     </div>
   </section>
 
-  <footer id="brandFoot">健康养成搞钱闯关游戏 · 初始版规则<br>步数 / 卡路里折币 · 上午倍率 · 提现均按规则文档实现</footer>
+  <footer id="brandFoot">健康养成搞钱闯关游戏 · 赚币规则 v1.0<br>步数 / 卡路里折币 · 上午倍率 · 提现均按规则文档实现</footer>
 </div>
 <div class="toast" id="toast"></div>
 
 <script src="./config.js"></script>
 <script>
-  const RATE=15;            // 1 步 / 1 大卡 = 15 币
-  const CASH=100;           // 100 币 = 1 元
-  const CAP=500000;         // demo 游戏币封顶（50 万币 = 可提现 ¥5000）
+  // 赚币规则 v1.0
+  const STEP_RATE=0.1;      // 每 10 步 = 1 币（0.1 币/步）
+  const CAL_RATE=10;        // 1 大卡 = 10 币
+  const CASH=5;             // 5 币 = 1 元
+  const CAP=5000;           // 钱包封顶 5,000 币 = ¥1,000
   const MULT=2;             // 上午倍率（固定 ×2）
   const BASE=4000;          // 基础步数：每天前 4000 步不计入赚币
   const WATER_GOAL=1500;    // NPC 饮水任务目标 ml
@@ -362,7 +350,7 @@
     const sa=+row.steps_am||0,sp=+row.steps_pm||0,wt=+row.water_ml||0;
     const [ca,cp]=effCal(row);
     const amE=Math.max(0,sa-BASE), baseLeft=Math.max(0,BASE-sa), pmE=Math.max(0,sp-baseLeft);
-    const stepCoin=amE*RATE*m+pmE*RATE, calCoin=ca*RATE*m+cp*RATE;
+    const stepCoin=amE*STEP_RATE*m+pmE*STEP_RATE, calCoin=ca*CAL_RATE*m+cp*CAL_RATE;
     const waterCoin=wt>=WATER_GOAL?WATER_REWARD:0;
     return Math.round(stepCoin+calCoin+waterCoin);
   }
@@ -372,11 +360,11 @@
   let DAYS=[], SEL=0;   // DAYS: 所有有数据的天(day desc)；SEL: 选中索引
   let DAILY_RAW=0, MEAL_RAW=0, GAMEDAYS=0, MEALS=[];
   const MEAL_GOAL=8, MEAL_REWARD=1000;
-  // 钱包累计 = 每日活动币 + 节食餐币（封顶 50 万）
+  // 钱包累计 = 每日活动币 + 节食餐币（封顶 5 千币 = ¥1,000）
   function recomputeWallet(){
     const capped=Math.min(DAILY_RAW+MEAL_RAW, CAP);
     $('rCoinTotal').textContent=capped.toLocaleString('zh-CN');
-    $('rDaysCnt').textContent=`/ ${GAMEDAYS}天 · 上限50万`;
+    $('rDaysCnt').textContent=`/ ${GAMEDAYS}天 · 上限¥1千`;
     $('rCash').textContent='¥'+(capped/CASH).toFixed(1);
   }
   function weekStart(d){ const x=new Date(d), wd=(x.getDay()+6)%7; x.setDate(x.getDate()-wd);
@@ -657,8 +645,31 @@
   $('tCalFile').addEventListener('change',e=>{ const f=e.target.files&&e.target.files[0]; uploadTechnogym(f); e.target.value=''; });
   $('bcBtn').addEventListener('click',()=>$('bcFile').click());
   $('bcFile').addEventListener('change',e=>{ const f=e.target.files&&e.target.files[0]; uploadBodyComp(f); e.target.value=''; });
-  $('rRefresh').addEventListener('click',()=>{fetchReal();fetchMeals();fetchBodyComp();});
-  fetchReal(); fetchMeals(); fetchBodyComp();
+  function readAll(){ return Promise.all([fetchReal(),fetchMeals(),fetchBodyComp()]); }
+  // 刷新 = 先触发 Strava 同步(把新运动从 Strava 搬进库),再读库
+  async function refreshAll(){
+    try{ await fetch(`${SB.url}/functions/v1/well2go-strava-sync?days=3`,{headers:{apikey:SB.anon,Authorization:'Bearer '+SB.anon},cache:'no-store'}); }catch(_){}
+    return readAll();
+  }
+  $('rRefresh').addEventListener('click',()=>{ refreshAll(); });
+
+  // 📲 下拉刷新：页面顶部下拉触发整页刷新
+  (function(){
+    const TH=68; let startY=0, pulling=false, dist=0, busy=false;
+    const ptr=document.createElement('div'); ptr.id='ptr';
+    ptr.style.cssText='position:fixed;left:50%;top:max(10px,env(safe-area-inset-top));transform:translate(-50%,-64px);padding:7px 16px;border-radius:999px;background:#fff;border:1px solid var(--line);box-shadow:0 6px 18px rgba(214,170,182,.32);font-size:13px;font-weight:800;color:var(--lime2);z-index:90;pointer-events:none;white-space:nowrap;';
+    document.body.appendChild(ptr);
+    const show=(y,t)=>{ ptr.style.transform='translate(-50%,'+y+'px)'; ptr.textContent=t; };
+    addEventListener('touchstart',e=>{ if(window.scrollY<=0 && !busy){ startY=e.touches[0].clientY; pulling=true; dist=0; ptr.style.transition='none'; } },{passive:true});
+    addEventListener('touchmove',e=>{ if(!pulling) return; dist=e.touches[0].clientY-startY;
+      if(dist>0 && window.scrollY<=0){ const y=Math.min(dist*0.45-64,14); show(y, dist*0.45>=TH?'松开刷新 🔄':'下拉刷新 ↓'); } },{passive:true});
+    addEventListener('touchend',async()=>{ if(!pulling) return; pulling=false; ptr.style.transition='transform .25s';
+      if(dist*0.45>=TH){ busy=true; show(14,'刷新中… ⟳'); try{ await refreshAll(); }catch(_){} show(14,'已刷新 ✓');
+        setTimeout(()=>{ show(-64,''); busy=false; },650); }
+      else { show(-64,''); } },{passive:true});
+  })();
+
+  readAll();
 </script>
 </body>
 </html>
