@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>五行运转规律 · Wiki</title>
+<meta name="description" content="真正的五行是什么——阴阳结合的五种运行模式，而非五种有形的物质。木火土金水的本质、相生相克六大关系、五行与身体。">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAFAF7; --paper2:#EFEFEA; --card:#FFFFFF;
+    --ink:#1E2422; --ink2:#5E6B66; --ink3:#9aa3a0;
+    --teal:#1D7A5F; --teal-d:#155C47; --teal-soft:rgba(29,122,95,.07); --teal-line:rgba(29,122,95,.22);
+    --gold:#A8843C; --gold-soft:rgba(168,132,60,.1); --gold-line:rgba(168,132,60,.34);
+    --line:rgba(30,36,34,.12); --line2:rgba(30,36,34,.22);
+    --serif:'Noto Serif SC',serif; --sans:'Noto Sans SC',sans-serif; --mono:'Space Mono',monospace;
+    /* 五行色 */
+    --wood:#3a9d6a; --fire:#d4604a; --earth:#b8953a; --metal:#8a9bae; --water:#4a8fb8;
+    --wood-soft:rgba(58,157,106,.08); --fire-soft:rgba(212,96,74,.08); --earth-soft:rgba(184,149,58,.08);
+    --metal-soft:rgba(138,155,174,.08); --water-soft:rgba(74,143,184,.08);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);font-weight:400;color:var(--ink);background:var(--paper);line-height:1.75;-webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(820px 480px at 84% -8%,rgba(29,122,95,.08),transparent 60%),radial-gradient(720px 520px at 4% 8%,rgba(168,132,60,.06),transparent 58%);background-attachment:fixed}
+  .wrap{width:min(900px,92%);margin:0 auto;padding:0 8px}
+  .back{display:inline-block;font-family:var(--mono);font-size:11px;color:var(--teal);text-decoration:none;margin-top:26px;letter-spacing:.5px}
+  .back:hover{text-decoration:underline}
+  .hero{padding:30px 0 16px}
+  .kicker{font-family:var(--mono);font-size:10px;letter-spacing:3.5px;text-transform:uppercase;color:var(--teal);font-weight:700;margin-bottom:18px;display:flex;align-items:center;gap:12px}
+  .kicker::before{content:"";width:34px;height:2px;background:var(--teal)}
+  h1{font-family:var(--serif);font-weight:900;font-size:clamp(31px,5.4vw,50px);line-height:1.08;letter-spacing:-1.3px;margin-bottom:16px}
+  h1 .d{color:var(--teal)}
+  .lead{font-size:15.5px;font-weight:300;color:var(--ink2);max-width:680px}
+  .lead b{color:var(--ink);font-weight:500}.lead .w{color:var(--teal);font-weight:500}
+  /* 五行色带 */
+  .wx-strip{height:4px;border-radius:4px;margin:22px 0 6px;background:linear-gradient(90deg,var(--wood),var(--fire),var(--earth),var(--metal),var(--water));opacity:.7}
+  /* 导航标签 */
+  .nav-tags{display:flex;flex-wrap:wrap;gap:9px;margin-top:20px}
+  .nav-tag{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--teal);border:1px solid var(--teal-line);background:var(--teal-soft);padding:5px 14px;border-radius:99px;cursor:pointer;transition:all .2s;text-decoration:none}
+  .nav-tag:hover{background:var(--teal);color:#fff;border-color:var(--teal)}
+  section{padding:22px 0}
+  .sh{font-family:var(--serif);font-weight:900;font-size:clamp(19px,3vw,26px);letter-spacing:-.3px;margin-bottom:5px}
+  .sub{font-size:12.5px;color:var(--ink3);font-weight:300;margin-bottom:20px}
+  p{margin:10px 0;font-size:14.5px;color:var(--ink2);font-weight:300}
+  p b{color:var(--ink);font-weight:500}
+  /* 引用块 */
+  .bq{border-left:3px solid var(--teal);padding:12px 18px;margin:16px 0;background:var(--teal-soft);border-radius:0 12px 12px 0;font-size:14.5px;color:var(--ink2);font-weight:300;line-height:1.8}
+  .bq b{color:var(--ink);font-weight:500}
+  .bq .w{color:var(--teal);font-weight:500}
+  /* 五行卡片 */
+  .wx-card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px 26px;margin-bottom:16px;transition:border-color .25s,box-shadow .25s;position:relative;overflow:hidden}
+  .wx-card:hover{border-color:var(--teal-line);box-shadow:0 20px 44px -32px rgba(29,122,95,.45)}
+  .wx-card::before{content:"";position:absolute;left:0;top:0;width:4px;height:100%}
+  .wx-card.wood{border-color:rgba(58,157,106,.2)}.wx-card.wood::before{background:var(--wood)}
+  .wx-card.fire{border-color:rgba(212,96,74,.2)}.wx-card.fire::before{background:var(--fire)}
+  .wx-card.earth{border-color:rgba(184,149,58,.2)}.wx-card.earth::before{background:var(--earth)}
+  .wx-card.metal{border-color:rgba(138,155,174,.2)}.wx-card.metal::before{background:var(--metal)}
+  .wx-card.water{border-color:rgba(74,143,184,.2)}.wx-card.water::before{background:var(--water)}
+  .wx-head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+  .wx-icon{font-size:28px;line-height:1}
+  .wx-name{font-family:var(--serif);font-weight:900;font-size:22px;letter-spacing:-.4px}
+  .wx-card.wood .wx-name{color:var(--wood)}.wx-card.fire .wx-name{color:var(--fire)}
+  .wx-card.earth .wx-name{color:var(--earth)}.wx-card.metal .wx-name{color:var(--metal)}
+  .wx-card.water .wx-name{color:var(--water)}
+  .wx-mode{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.5px;padding:3px 10px;border-radius:20px}
+  .wx-card.wood .wx-mode{color:var(--wood);background:var(--wood-soft);border:1px solid rgba(58,157,106,.25)}
+  .wx-card.fire .wx-mode{color:var(--fire);background:var(--fire-soft);border:1px solid rgba(212,96,74,.25)}
+  .wx-card.earth .wx-mode{color:var(--earth);background:var(--earth-soft);border:1px solid rgba(184,149,58,.25)}
+  .wx-card.metal .wx-mode{color:var(--metal);background:var(--metal-soft);border:1px solid rgba(138,155,174,.25)}
+  .wx-card.water .wx-mode{color:var(--water);background:var(--water-soft);border:1px solid rgba(74,143,184,.25)}
+  .wx-body{margin-top:10px}
+  .wx-pair{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:12px}
+  @media(max-width:640px){.wx-pair{grid-template-columns:1fr}}
+  .wx-aspect{background:var(--paper2);border:1px solid var(--line);border-radius:12px;padding:13px 15px}
+  .wx-aspect .lab{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+  .wx-aspect.form .lab{color:var(--gold)}.wx-aspect.spirit .lab{color:var(--teal)}
+  .wx-aspect p{font-size:12.5px;color:var(--ink2);font-weight:300;margin:4px 0}.wx-aspect p b{color:var(--ink);font-weight:500}
+  /* 表格 */
+  .wtable{width:100%;border-collapse:collapse;margin:16px 0;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .wtable th{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;text-align:left;padding:13px 18px;background:var(--paper2);color:var(--teal-d);border-bottom:1px solid var(--line)}
+  .wtable td{font-size:13.5px;color:var(--ink2);font-weight:300;padding:12px 18px;border-bottom:1px solid var(--line)}
+  .wtable td b{color:var(--ink);font-weight:500}
+  .wtable tr:last-child td{border-bottom:none}
+  /* 相生相克 */
+  .rel-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px}
+  @media(max-width:640px){.rel-grid{grid-template-columns:1fr}}
+  .rel-box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;transition:border-color .25s,box-shadow .25s}
+  .rel-box:hover{border-color:var(--teal-line);box-shadow:0 12px 32px -20px rgba(29,122,95,.35)}
+  .rel-box .rl{font-family:var(--serif);font-weight:700;font-size:15px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .rel-box .rl .dot{width:8px;height:8px;border-radius:50%}
+  .rel-box.sheng .rl .dot{background:var(--teal)}.rel-box.ke .rl .dot{background:var(--fire)}
+  .rel-item{padding:9px 0;border-bottom:1px dashed var(--line);font-size:13px;color:var(--ink2);font-weight:300}
+  .rel-item:last-child{border-bottom:none}
+  .rel-item b{color:var(--ink);font-weight:500}
+  .rel-item .tag{font-family:var(--mono);font-size:10px;font-weight:700;padding:2px 8px;border-radius:12px;margin-left:6px}
+  .rel-item .tag.ok{color:var(--teal);background:var(--teal-soft);border:1px solid var(--teal-line)}
+  .rel-item .tag.warn{color:var(--gold);background:var(--gold-soft);border:1px solid var(--gold-line)}
+  .rel-item .tag.bad{color:var(--fire);background:var(--fire-soft);border:1px solid rgba(212,96,74,.25)}
+  /* 关系示意 */
+  .cycle{display:flex;align-items:center;justify-content:center;gap:6px;margin:18px 0;flex-wrap:wrap;font-family:var(--serif);font-weight:700;font-size:15px}
+  .cycle .wx{padding:6px 14px;border-radius:10px;font-weight:700}
+  .cycle .wx.wood{color:var(--wood);background:var(--wood-soft)}.cycle .wx.fire{color:var(--fire);background:var(--fire-soft)}
+  .cycle .wx.earth{color:var(--earth);background:var(--earth-soft)}.cycle .wx.metal{color:var(--metal);background:var(--metal-soft)}
+  .cycle .wx.water{color:var(--water);background:var(--water-soft)}
+  .cycle .arr{color:var(--ink3);font-size:13px;font-weight:400}
+  /* 收口 */
+  .outro{margin:24px 0 40px;border:1px solid var(--teal-line);border-radius:18px;padding:30px;background:linear-gradient(180deg,var(--teal-soft),transparent 55%),var(--card)}
+  .outro p{font-family:var(--serif);font-size:15.5px;font-weight:700;line-height:1.7}.outro .w{color:var(--teal)}
+  .outro .keys{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:18px}
+  .outro .key{font-family:var(--sans);font-size:13px;font-weight:400;color:var(--ink2);padding:10px 14px;background:var(--paper2);border:1px solid var(--line);border-radius:10px;line-height:1.6}
+  .outro .key b{color:var(--ink);font-weight:500}
+  footer{text-align:center;font-family:var(--mono);font-size:10px;color:var(--ink3);padding:14px 0 50px;letter-spacing:.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="./">← Wiki 首页</a>
+  <header class="hero">
+    <div class="kicker">Know-how · 五行运转规律</div>
+    <h1>真正的<span class="d">五行</span>是什么</h1>
+    <p class="lead">很多人把五行理解成五种有形的物质——那是「五材」，不是「五行」。<br>五行是<b>阴阳结合之后的五种运行模式</b>：木火土金水，讲的是<span class="w">气怎么走</span>，不是东西长什么样。</p>
+    <div class="wx-strip"></div>
+    <div class="nav-tags">
+      <a class="nav-tag" href="#nature">五行本质</a>
+      <a class="nav-tag" href="#detail">逐行详解</a>
+      <a class="nav-tag" href="#vs">五行 vs 五材</a>
+      <a class="nav-tag" href="#relations">相生相克</a>
+      <a class="nav-tag" href="#body">五行与身体</a>
+      <a class="nav-tag" href="#summary">要点总结</a>
+    </div>
+  </header>
+
+  <!-- 五行本质 -->
+  <section id="nature">
+    <div class="sh">五行本质</div>
+    <div class="sub">不是五种东西，是五种运行模式。</div>
+    <div class="bq">
+      <b>五行 = 阴阳结合之后的五种运行模式。</b>老百姓叫「木火土金水」，按五运六气的解释，就是<b>阴阳之气</b>在不同阶段的运行方式——升、发、衡、收、藏。<br><br>
+      老百姓天天在用，但不理解它的意思。真正的<b class="w">行</b>——是运行的模式，而不是<b>形</b>——有形的物质。
+    </div>
+    <p>每种行都有<b>有形</b>和<b>无形</b>两种表现。在天为气，在地为形。看得见的是「形」，看不见但一直在动的是「气」。五行运转，说的是气的层面。</p>
+  </section>
+
+  <!-- 逐行详解 -->
+  <section id="detail">
+    <div class="sh">逐行详解</div>
+    <div class="sub">五种运行模式，各有方向、各有表象。</div>
+
+    <!-- 木 -->
+    <div class="wx-card wood">
+      <div class="wx-head">
+        <span class="wx-icon">🌿</span>
+        <span class="wx-name">木</span>
+        <span class="wx-mode">阳生阴长</span>
+      </div>
+      <div class="wx-body">
+        <p>春天草木生发——<b>阳气往上长，阴气也跟着往上长</b>，是阴阳结合的。它开始往上长了，都是往上升的、往外发的。这个状态如果固定下来，就是有形的木。</p>
+        <div class="wx-pair">
+          <div class="wx-aspect form">
+            <div class="lab">有形 · 在地</div>
+            <p>草、木、藤——<b>看得见的长着的东西</b>，都属于有形的木。</p>
+          </div>
+          <div class="wx-aspect spirit">
+            <div class="lab">无形 · 在天</div>
+            <p><b>风</b>——变动、往上升往外长。六气中叫「<b>厥阴风木</b>」：风属阳木，看得见的木头属阴木。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 火 -->
+    <div class="wx-card fire">
+      <div class="wx-head">
+        <span class="wx-icon">🔥</span>
+        <span class="wx-name">火</span>
+        <span class="wx-mode">发光发热 · 灵动</span>
+      </div>
+      <div class="wx-body">
+        <p>木生火——<b>能发光、发热、很灵动</b>，这就是火的运行状态。</p>
+        <div class="wx-pair">
+          <div class="wx-aspect form">
+            <div class="lab">有形 · 在地</div>
+            <p>木头点火后的状态——<b>看得见的火</b>。</p>
+          </div>
+          <div class="wx-aspect spirit">
+            <div class="lab">无形 · 在天</div>
+            <p><b>阳气</b>——大家天天在用的。阳气的再生不全部从木生出来，还有木生火的过程。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 土 -->
+    <div class="wx-card earth">
+      <div class="wx-head">
+        <span class="wx-icon">🏔️</span>
+        <span class="wx-name">土</span>
+        <span class="wx-mode">阴阳动态平衡</span>
+      </div>
+      <div class="wx-body">
+        <p>标准的理解应该是：<b>阴阳相对平衡的运行状态</b>。阳气多一点就变木，再多就变火；阳气开始回收少一点就变金。只有阳气动态平衡的状态也在运行的，就叫土。</p>
+        <div class="wx-pair">
+          <div class="wx-aspect form">
+            <div class="lab">有形 · 在地</div>
+            <p><b>山川大地</b>——比较有形，也比较稳定。</p>
+          </div>
+          <div class="wx-aspect spirit">
+            <div class="lab">无形 · 在天</div>
+            <p><b>云、灰尘、雾霾</b>——天上的土。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 金 -->
+    <div class="wx-card metal">
+      <div class="wx-head">
+        <span class="wx-icon">⚔️</span>
+        <span class="wx-name">金</span>
+        <span class="wx-mode">阳收阴沉</span>
+      </div>
+      <div class="wx-body">
+        <p><b>阳气开始回收下降</b>的过程，叫阳收阴沉。阳气往下收，阴气往下降——这就是金的运行模式。摸着木头是温暖的，摸着金属是凉的——它有一个主动往下收藏、凉化的过程。</p>
+        <div class="wx-pair">
+          <div class="wx-aspect form">
+            <div class="lab">有形 · 在地</div>
+            <p><b>金属、重金属、矿物</b>——能接收温度变化，变化后容易凉化。</p>
+          </div>
+          <div class="wx-aspect spirit">
+            <div class="lab">无形 · 在天</div>
+            <p>从气的层面它是<b>凉的</b>。凉了以后才会变成水——空气一凉，玻璃上就有雾出来，气化形，水滴出来。这就是金转水的动态过程。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 水 -->
+    <div class="wx-card water">
+      <div class="wx-head">
+        <span class="wx-icon">💧</span>
+        <span class="wx-name">水</span>
+        <span class="wx-mode">收藏</span>
+      </div>
+      <div class="wx-body">
+        <p>就像冬天一样——<b>要开始收藏了，把阳气藏起来，藏到水里</b>。这是最后一个运行模式，也是新一轮循环的起点。</p>
+        <div class="wx-pair">
+          <div class="wx-aspect form">
+            <div class="lab">有形 · 在地</div>
+            <p><b>水</b>——看得见的液态，收藏阳气的地方。</p>
+          </div>
+          <div class="wx-aspect spirit">
+            <div class="lab">无形 · 在天</div>
+            <p><b>寒气</b>——极阴收藏，阳气深藏不露，等待春天重新生发。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 五行 vs 五材 -->
+  <section id="vs">
+    <div class="sh">五行 vs 五材</div>
+    <div class="sub">差别巨大，混为一谈是一切误解的根源。</div>
+    <table class="wtable">
+      <tr><th>概念</th><th>含义</th><th>特点</th></tr>
+      <tr><td><b>五行</b></td><td>阴阳结合的五种<b>运行模式</b>（气的层面）</td><td>转化快，动态，有相生相克</td></tr>
+      <tr><td><b>五材</b></td><td>五种<b>有形的物质</b>（材料的材）</td><td>转化非常缓慢，甚至千年不变</td></tr>
+    </table>
+    <div class="bq">
+      很多老百姓经常把五行形容成五种有形的物质，叫「<b>五材</b>」。五材相互转化非常缓慢——好的木头千年不变，就不转化了，就被定型了。<b class="w">真正的转化都是在气的层面，运转会比较快。</b>
+    </div>
+  </section>
+
+  <!-- 相生相克 -->
+  <section id="relations">
+    <div class="sh">相生相克：六大关系</div>
+    <div class="sub">如果已经是化形的金木水火土，它们之间只有排列关系。相生相克只在气的层面，需要阴阳参与。</div>
+
+    <div class="cycle">
+      <span class="wx wood">木</span><span class="arr">→</span>
+      <span class="wx fire">火</span><span class="arr">→</span>
+      <span class="wx earth">土</span><span class="arr">→</span>
+      <span class="wx metal">金</span><span class="arr">→</span>
+      <span class="wx water">水</span><span class="arr">→</span>
+      <span class="wx wood">木</span>
+      <span style="font-size:12px;color:var(--ink3);margin-left:8px">相生循环</span>
+    </div>
+
+    <div class="rel-grid">
+      <!-- 相生 -->
+      <div class="rel-box sheng">
+        <div class="rl"><span class="dot"></span>相生三大关系</div>
+        <div class="rel-item"><b>正常相生</b>：木生火——没有木，火生不出来。<span class="tag ok">动态平衡</span></div>
+        <div class="rel-item"><b>没得生</b>：缺少生源——火无源可续，难以维持。<span class="tag warn">不足</span></div>
+        <div class="rel-item"><b>生过头</b>：木太多，火反而被压灭了——好东西给太多，反而坏事。<span class="tag bad">过量</span></div>
+      </div>
+      <!-- 相克 -->
+      <div class="rel-box ke">
+        <div class="rl"><span class="dot"></span>相克三大关系</div>
+        <div class="rel-item"><b>正常相克（制约）</b>：相克不是坏事，是制约、动态平衡——水克火，火太旺需要压一压。<span class="tag ok">动态平衡</span></div>
+        <div class="rel-item"><b>克过头</b>：领导太强势，拼命压你——你瘫倒了，大局也破掉了。<span class="tag bad">过量</span></div>
+        <div class="rel-item"><b>没得克</b>：领导太弱管不了你——你不发挥也行，公司运行不了，最后也破。<span class="tag warn">不足</span></div>
+      </div>
+    </div>
+
+    <div class="bq" style="margin-top:20px">
+      <b>职场类比</b>：相克可以形容为你的领导——<br>
+      · 领导太强势 → 知道你有四分力量，想发挥到八分，拼命给你加工作 → 你瘫倒了 → <b>克过头</b><br>
+      · 领导太弱 → 没人管你，你一分都不发挥也可以 → 动态平衡打乱 → <b>没得克</b><br>
+      · 刚好的领导 → 给方向给约束，你在框架内发挥 → <b class="w">动态平衡</b>
+    </div>
+  </section>
+
+  <!-- 五行与身体 -->
+  <section id="body">
+    <div class="sh">五行与身体</div>
+    <div class="sub">六大关系要保持动态平衡，哪个环节直接破了，运行就终止了。</div>
+
+    <div class="wx-card" style="border-left:4px solid var(--teal)">
+      <div class="wx-body">
+        <p><b>没得克也不行，克过头也不行；没得生也不行，生过头也不行。</b>这六大关系要保持动态平衡。</p>
+        <p style="margin-top:14px"><b>举例：金旺克木</b></p>
+        <p>五运六气轮盘里，金很旺 → 金会克木。如果不干活，金在你身体里「咔咔咔」砍木头——时间一长，木就被克死了。</p>
+        <p>除非木也很旺，两个人就内耗 → 木克土 → 肝脏出问题。</p>
+        <p>如果告诉你金有多少能量、能做什么事情 → 你去做事情 → 金跟木的关系就达到<b>相对的动态平衡</b>了。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 要点总结 -->
+  <section id="summary">
+    <div class="sh">关键要点</div>
+    <div class="sub">五句话，带走全文精华。</div>
+    <div class="outro">
+      <p>学会了五行，就可以把它带到<span class="w">你的生活、你的身体、你的事业</span>。你要学会调整五行运转的动态平衡。调整好了——身体也好了，生活也顺了，事业也灿烂。</p>
+      <div class="keys">
+        <div class="key"><b>1. 五行 ≠ 五材</b>：五行是运行模式（气），不是有形物质（形）。</div>
+        <div class="key"><b>2. 在天为气，在地为形</b>：每种行都有有形和无形两种表现。</div>
+        <div class="key"><b>3. 相生相克都在气的层面</b>：有形物质之间只有排列关系。</div>
+        <div class="key"><b>4. 六大关系要动态平衡</b>：生/克各三种状态——正常、过头、不足。</div>
+        <div class="key"><b>5. 调整动态平衡 = 调整人生</b>：适用于身体、生活、事业。</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>well2go.ai/wiki · 五行运转规律 · 视频转录整理 · mlx-whisper</footer>
+</div>
+</body>
+</html>
